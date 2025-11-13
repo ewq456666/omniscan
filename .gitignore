@@ -1,0 +1,53 @@
+# Dependency directories
+node_modules/
+
+# Expo caches
+.expo/
+.expo-shared/
+
+# Build outputs
+build/
+dist/
+web-build/
+
+# Native platform artifacts
+android/
+ios/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.idea/
+.vscode/
+*.iml
+
+# TypeScript incremental build files
+*.tsbuildinfo
+
+# Coverage reports
+coverage/
+
+# Environment files and secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.keystore
+
+# Expo update manifests
+updates.json
+app.config.local.json
+
