@@ -15,7 +15,6 @@ import {
 type AppStatus = {
   syncStatus: 'idle' | 'syncing' | 'error';
   pendingUploads: number;
-  storageUsage: number;
 };
 
 type MockDataState = {
@@ -26,7 +25,6 @@ type MockDataState = {
   tags: string[];
   categories: string[];
   appStatus: AppStatus;
-  toggleFavoriteTag: (tag: string) => void;
 };
 
 export const useMockDataStore = create<MockDataState>((set) => ({
@@ -39,16 +37,5 @@ export const useMockDataStore = create<MockDataState>((set) => ({
   appStatus: {
     syncStatus: 'syncing',
     pendingUploads: 3,
-    storageUsage: 62,
   },
-  toggleFavoriteTag: (tag: string) =>
-    set((state) => {
-      const exists = state.tags.includes(tag);
-      return exists
-        ? state
-        : {
-            ...state,
-            tags: [...state.tags, tag],
-          };
-    }),
 }));

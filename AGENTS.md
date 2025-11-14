@@ -9,7 +9,7 @@ OmniScan is an Expo SDK 54 React Native app that boots through `App.tsx → expo
 - Visual and business behavior for each screen lives under `screens/`, imported into the matching route file. This separation keeps Expo Router concerns (navigation) distinct from UI composition.
 
 ## State & Data Flow
-- `stores/useMockDataStore.ts` is the single Zustand store. It hydrates mock scans, content, tags, and processing steps from `data/mockData.ts` and exposes tiny mutators (`toggleFavoriteTag`).
+- `stores/useMockDataStore.ts` is the single Zustand store. It hydrates mock scans, content, tags, and processing steps from `data/mockData.ts` and exposes the current sync status/pending uploads for dashboard widgets.
 - Screens subscribe to slices of that store plus utility hooks (e.g., `useThemeColors`). No Redux or context layers exist—prefer adding selectors/actions to the Zustand store when new state is required.
 - Async/real backends have not been integrated yet; swap `mockData.ts` for actual queries when needed and keep domain types alongside their data definitions.
 
