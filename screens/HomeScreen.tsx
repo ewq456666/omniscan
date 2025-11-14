@@ -22,6 +22,66 @@ export function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { scans, appStatus } = useMockDataStore();
+  const hasPendingUploads = appStatus.pendingUploads > 0;
+  const pendingCopy = `${appStatus.pendingUploads} pending ${appStatus.pendingUploads === 1 ? 'upload' : 'uploads'}`;
+  const quickActions = [
+    {
+      key: 'capture',
+      title: hasPendingUploads ? 'Resume Capture' : 'Start Scan',
+      subtitle: hasPendingUploads ? pendingCopy : 'Capture a new document',
+      icon: (
+        <MaterialCommunityIcons
+          name="camera"
+          size={28}
+          color="#FFFFFF"
+        />
+      ),
+      onPress: () => router.push('/camera'),
+      variant: 'primary' as const,
+    },
+    {
+      key: 'import',
+      title: 'Import',
+      subtitle: 'Add from gallery',
+      icon: (
+        <MaterialCommunityIcons
+          name="image-multiple"
+          size={28}
+          color="#FFFFFF"
+        />
+      ),
+      onPress: () => router.push('/gallery'),
+      accentColor: colors.secondary,
+    },
+    {
+      key: 'progress',
+      title: 'Track Progress',
+      subtitle: 'Processing status',
+      icon: (
+        <MaterialCommunityIcons
+          name="progress-clock"
+          size={28}
+          color="#FFFFFF"
+        />
+      ),
+      onPress: () => router.push('/processing'),
+      accentColor: colors.success,
+    },
+    {
+      key: 'results',
+      title: 'Review Latest',
+      subtitle: 'Inspect extraction',
+      icon: (
+        <MaterialCommunityIcons
+          name="file-document-edit"
+          size={28}
+          color="#FFFFFF"
+        />
+      ),
+      onPress: () => router.push('/results'),
+      accentColor: colors.warning,
+    },
+  ];
 
   return (
     <ScrollView
@@ -56,54 +116,17 @@ export function HomeScreen() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: spacing.md, paddingRight: spacing.lg }}
       >
-        <QuickActionCard
-          title="Start Scan"
-          subtitle="Capture a new document"
-          icon={
-            <MaterialCommunityIcons
-              name='camera'
-              size={28}
-              color='#FFFFFF'
-            />
-          }
-          onPress={() => router.push('/camera')}
-        />
-        <QuickActionCard
-          title="Import"
-          subtitle="Add from gallery"
-          icon={
-            <MaterialCommunityIcons
-              name='image-multiple'
-              size={28}
-              color='#FFFFFF'
-            />
-          }
-          onPress={() => router.push('/gallery')}
-        />
-        <QuickActionCard
-          title="Track Progress"
-          subtitle="View processing status"
-          icon={
-            <MaterialCommunityIcons
-              name='progress-clock'
-              size={28}
-              color='#FFFFFF'
-            />
-          }
-          onPress={() => router.push('/processing')}
-        />
-        <QuickActionCard
-          title="Review Latest"
-          subtitle="Inspect recent extraction"
-          icon={
-            <MaterialCommunityIcons
-              name='file-document-edit'
-              size={28}
-              color='#FFFFFF'
-            />
-          }
-          onPress={() => router.push('/results')}
-        />
+        {quickActions.map((action) => (
+          <QuickActionCard
+            key={action.key}
+            title={action.title}
+            subtitle={action.subtitle}
+            icon={action.icon}
+            onPress={action.onPress}
+            variant={action.variant}
+            accentColor={action.accentColor}
+          />
+        ))}
       </ScrollView>
 
       <SectionHeader

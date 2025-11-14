@@ -17,4 +17,5 @@ export const palette = {
 export const gradients = {
   primary: ['#1E3A8A', '#2563EB'],
   accent: ['#7C3AED', '#F97316'],
-};
+  capture: ['#1E3A8A', '#7C3AED'],
+} as const;
