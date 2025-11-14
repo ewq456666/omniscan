@@ -1,16 +1,14 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useRouter } from 'expo-router';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
 import { FieldCard } from '@/components/FieldCard';
 import { TagChip } from '@/components/TagChip';
-import { RootStackParamList } from '@/navigation/types';
 
 export function ContentDetailScreen() {
   const colors = useThemeColors();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const router = useRouter();
   const { content } = useMockDataStore();
   const item = content[0];
 
@@ -36,7 +34,7 @@ export function ContentDetailScreen() {
       </View>
       <View style={styles.headerRow}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Extracted Data</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('ContentEdit')}>
+        <TouchableOpacity onPress={() => router.push('/content-edit')}>
           <Text style={{ color: colors.primary }}>Edit</Text>
         </TouchableOpacity>
       </View>

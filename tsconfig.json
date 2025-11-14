@@ -9,7 +9,6 @@
       "@/data/*": ["data/*"],
       "@/stores/*": ["stores/*"],
       "@/theme/*": ["theme/*"],
-      "@/navigation/*": ["navigation/*"],
       "@/hooks/*": ["hooks/*"]
     }
   },

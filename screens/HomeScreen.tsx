@@ -1,6 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   FlatList,
@@ -17,12 +16,11 @@ import { QuickActionCard } from '@/components/QuickActionCard';
 import { ScanItemCard } from '@/components/ScanItemCard';
 import { TagChip } from '@/components/TagChip';
 import { useMockDataStore } from '@/stores/useMockDataStore';
-import { RootStackParamList } from '@/navigation/types';
 
 export function HomeScreen() {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const router = useRouter();
   const { scans, appStatus } = useMockDataStore();
 
   return (
@@ -68,7 +66,7 @@ export function HomeScreen() {
               color='#FFFFFF'
             />
           }
-          onPress={() => navigation.navigate('Camera')}
+          onPress={() => router.push('/camera')}
         />
         <QuickActionCard
           title="Import"
@@ -80,7 +78,7 @@ export function HomeScreen() {
               color='#FFFFFF'
             />
           }
-          onPress={() => navigation.navigate('Gallery')}
+          onPress={() => router.push('/gallery')}
         />
         <QuickActionCard
           title="Track Progress"
@@ -92,7 +90,7 @@ export function HomeScreen() {
               color='#FFFFFF'
             />
           }
-          onPress={() => navigation.navigate('Processing')}
+          onPress={() => router.push('/processing')}
         />
         <QuickActionCard
           title="Review Latest"
@@ -104,14 +102,14 @@ export function HomeScreen() {
               color='#FFFFFF'
             />
           }
-          onPress={() => navigation.navigate('Results')}
+          onPress={() => router.push('/results')}
         />
       </ScrollView>
 
       <SectionHeader
         title="Recent Scans"
         action={
-          <TouchableOpacity onPress={() => navigation.navigate('ContentList')}>
+          <TouchableOpacity onPress={() => router.push('/content-list')}>
             <Text style={{ color: colors.primary }}>View All</Text>
           </TouchableOpacity>
         }
