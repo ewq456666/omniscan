@@ -1,163 +1,165 @@
+import { useMemo } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ListRenderItemInfo, StyleSheet, Text, View } from 'react-native';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
-import { SectionHeader } from '@/components/SectionHeader';
-import { QuickActionCard } from '@/components/QuickActionCard';
-import { ScanItemCard } from '@/components/ScanItemCard';
-import { TagChip } from '@/components/TagChip';
-import { useMockDataStore } from '@/stores/useMockDataStore';
+import { HeroInsightCard } from '@/components/home/HeroInsightCard';
+import { QuickAction, QuickActionGrid } from '@/components/home/QuickActionGrid';
+import { ProcessingCapsule } from '@/components/home/ProcessingCapsule';
+import { RecentScansStack } from '@/components/home/RecentScansStack';
+import { AdaptivePanel } from '@/components/home/AdaptivePanel';
+import { useMockDataStore, HomeModuleKey } from '@/stores/useMockDataStore';
+
+type ModuleItem = {
+  key: HomeModuleKey;
+};
 
 export function HomeScreen() {
   const colors = useThemeColors();
   const router = useRouter();
-  const { scans, appStatus } = useMockDataStore();
-  const hasPendingUploads = appStatus.pendingUploads > 0;
-  const pendingCopy = `${appStatus.pendingUploads} pending ${appStatus.pendingUploads === 1 ? 'upload' : 'uploads'}`;
-  const quickActions = [
-    {
-      key: 'capture',
-      title: hasPendingUploads ? 'Resume Capture' : 'Start Scan',
-      subtitle: hasPendingUploads ? pendingCopy : 'Capture a new document',
-      icon: (
-        <MaterialCommunityIcons
-          name="camera"
-          size={28}
-          color="#FFFFFF"
-        />
-      ),
-      onPress: () => router.push('/camera'),
-      variant: 'primary' as const,
-    },
-    {
-      key: 'import',
-      title: 'Import',
-      subtitle: 'Add from gallery',
-      icon: (
-        <MaterialCommunityIcons
-          name="image-multiple"
-          size={28}
-          color="#FFFFFF"
-        />
-      ),
-      onPress: () => router.push('/gallery'),
-      accentColor: colors.secondary,
-    },
-    {
-      key: 'progress',
-      title: 'Track Progress',
-      subtitle: 'Processing status',
-      icon: (
-        <MaterialCommunityIcons
-          name="progress-clock"
-          size={28}
-          color="#FFFFFF"
-        />
-      ),
-      onPress: () => router.push('/processing'),
-      accentColor: colors.success,
-    },
-    {
-      key: 'results',
-      title: 'Review Latest',
-      subtitle: 'Inspect extraction',
-      icon: (
-        <MaterialCommunityIcons
-          name="file-document-edit"
-          size={28}
-          color="#FFFFFF"
-        />
-      ),
-      onPress: () => router.push('/results'),
-      accentColor: colors.warning,
-    },
-  ];
+  const scans = useMockDataStore((state) => state.scans);
+  const appStatus = useMockDataStore((state) => state.appStatus);
+  const processingSteps = useMockDataStore((state) => state.processingSteps);
+  const tags = useMockDataStore((state) => state.tags);
+  const homeLayout = useMockDataStore((state) => state.homeLayout);
+  const setAdaptivePanelType = useMockDataStore((state) => state.setAdaptivePanelType);
+
+  const modules: ModuleItem[] = homeLayout.order.map((key) => ({ key }));
+  const lastScanTitle = scans[0]?.title;
+  const overallProgress =
+    processingSteps.length === 0
+      ? 0
+      : Math.round(
+          (processingSteps.reduce((sum, step) => sum + step.progress, 0) / processingSteps.length) * 100,
+        );
+
+  const quickActions: QuickAction[] = useMemo(
+    () => [
+      {
+        key: 'capture',
+        title: appStatus.pendingUploads > 0 ? 'Resume capture' : 'Start scan',
+        subtitle:
+          appStatus.pendingUploads > 0
+            ? `${appStatus.pendingUploads} pending`
+            : 'Capture a new document',
+        icon: <MaterialCommunityIcons name="camera" size={24} color="#FFFFFF" />,
+        onPress: () => router.push('/camera'),
+        accentColor: colors.primary,
+        emphasis: true,
+      },
+      {
+        key: 'import',
+        title: 'Import',
+        subtitle: 'Add from gallery',
+        icon: <MaterialCommunityIcons name="image-multiple" size={22} color={colors.text} />,
+        onPress: () => router.push('/gallery'),
+      },
+      {
+        key: 'progress',
+        title: 'Track progress',
+        subtitle: 'Processing status',
+        icon: <MaterialCommunityIcons name="progress-check" size={22} color={colors.text} />,
+        onPress: () => router.push('/processing'),
+      },
+      {
+        key: 'results',
+        title: 'Review latest',
+        subtitle: 'Inspect extraction',
+        icon: <MaterialCommunityIcons name="file-document-edit" size={22} color={colors.text} />,
+        onPress: () => router.push('/results'),
+      },
+    ],
+    [appStatus.pendingUploads, colors.primary, colors.text, router],
+  );
+
+  const renderModule = ({ item }: ListRenderItemInfo<ModuleItem>) => {
+    switch (item.key) {
+      case 'hero':
+        return (
+          <View style={styles.module}>
+            <HeroInsightCard
+              pendingUploads={appStatus.pendingUploads}
+              lastScanTitle={lastScanTitle}
+              onPrimaryAction={() =>
+                appStatus.pendingUploads > 0 ? router.push('/processing') : router.push('/camera')
+              }
+              onSecondaryAction={() =>
+                appStatus.pendingUploads > 0 ? router.push('/camera') : router.push('/results')
+              }
+            />
+          </View>
+        );
+      case 'quickActions':
+        return (
+          <View style={styles.module}>
+            <QuickActionGrid actions={quickActions} />
+          </View>
+        );
+      case 'processing':
+        return (
+          <View style={styles.module}>
+            <ProcessingCapsule progress={overallProgress} onPress={() => router.push('/processing')} />
+          </View>
+        );
+      case 'recentScans':
+        return (
+          <View style={styles.module}>
+            <RecentScansStack
+              scans={scans}
+              onPressLibrary={() => router.push('/content-list')}
+              onPressScan={(scan) => router.push({ pathname: '/content-detail', params: { id: scan.id } })}
+            />
+          </View>
+        );
+      case 'adaptive':
+        return (
+          <View style={styles.module}>
+            <AdaptivePanel
+              panelType={homeLayout.adaptivePanel}
+              setPanelType={setAdaptivePanelType}
+              tags={tags}
+              scans={scans}
+            />
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <FlatList
-        data={scans}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ScanItemCard item={item} />}
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: spacing.xxl, paddingHorizontal: spacing.lg }}
+        data={modules}
+        keyExtractor={(item) => item.key}
+        renderItem={renderModule}
+        contentContainerStyle={{
+          paddingHorizontal: spacing.lg,
+          paddingTop: spacing.lg,
+          paddingBottom: spacing.xxl,
+        }}
+        ItemSeparatorComponent={() => <View style={{ height: spacing.lg }} />}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          <View>
-            <View style={styles.header}>
-              <View>
-                <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
-                <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-                  OmniScan keeps your documents organized
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={[styles.syncBadge, { backgroundColor: colors.surface }]}
-                onPress={() => router.push('/processing')}
-                accessibilityRole="button"
-                accessibilityLabel="View processing queue"
-                accessibilityHint="Opens the processing progress screen"
-              >
-                <MaterialCommunityIcons
-                  name={appStatus.syncStatus === 'syncing' ? 'sync' : 'check-circle'}
-                  color={colors.primary}
-                  size={18}
-                />
-                <Text style={[styles.syncText, { color: colors.text }]}>
-                  {appStatus.pendingUploads} pending
-                </Text>
-              </TouchableOpacity>
+          <View style={styles.header}>
+            <View>
+              <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
+              <Text style={[styles.subtitle, { color: colors.textMuted }]}>
+                Keep your documents organized and searchable
+              </Text>
             </View>
-
-            <SectionHeader title="Quick Actions" />
-            <FlatList
-              data={quickActions}
-              horizontal
-              keyExtractor={(item) => item.key}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingBottom: spacing.md,
-                paddingRight: spacing.lg,
-              }}
-              renderItem={({ item }) => (
-                <QuickActionCard
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  icon={item.icon}
-                  onPress={item.onPress}
-                  variant={item.variant}
-                  accentColor={item.accentColor}
-                />
-              )}
-            />
-
-            <SectionHeader
-              title="Recent Scans"
-              action={
-                <TouchableOpacity onPress={() => router.push('/content-list')}>
-                  <Text style={{ color: colors.primary }}>View All</Text>
-                </TouchableOpacity>
-              }
-            />
-          </View>
-        }
-        ListFooterComponent={
-          <View style={{ marginTop: spacing.xl }}>
-            <SectionHeader title="Suggested Tags" />
-            <FlatList
-              horizontal
-              data={scans.flatMap((scan) => scan.tags)}
-              keyExtractor={(item, index) => `${item}-${index}`}
-              renderItem={({ item }) => (
-                <View style={{ marginRight: spacing.sm }}>
-                  <TagChip label={item} />
-                </View>
-              )}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: spacing.lg }}
-            />
+            <View style={[styles.syncBadge, { backgroundColor: colors.surface }]}>
+              <MaterialCommunityIcons
+                name={appStatus.syncStatus === 'syncing' ? 'sync' : 'check-circle'}
+                color={colors.primary}
+                size={18}
+              />
+              <Text style={[styles.syncText, { color: colors.text }]}>
+                {appStatus.pendingUploads} pending
+              </Text>
+            </View>
           </View>
         }
       />
@@ -169,18 +171,14 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  container: {
-    flex: 1,
-  },
   header: {
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.lg,
+    paddingBottom: spacing.xl,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
   },
   subtitle: {
@@ -198,5 +196,8 @@ const styles = StyleSheet.create({
     marginLeft: spacing.xs,
     fontSize: 13,
     fontWeight: '600',
+  },
+  module: {
+    width: '100%',
   },
 });

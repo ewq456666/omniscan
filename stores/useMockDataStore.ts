@@ -25,6 +25,14 @@ export type Preferences = {
   notifications: boolean;
 };
 
+export type HomeModuleKey = 'hero' | 'quickActions' | 'processing' | 'recentScans' | 'adaptive';
+export type AdaptivePanelType = 'tags' | 'pending';
+
+type HomeLayout = {
+  order: HomeModuleKey[];
+  adaptivePanel: AdaptivePanelType;
+};
+
 type MockDataState = {
   scans: ScanItem[];
   content: ContentItem[];
@@ -34,12 +42,15 @@ type MockDataState = {
   categories: string[];
   appStatus: AppStatus;
   preferences: Preferences;
+  homeLayout: HomeLayout;
 };
 
 type MockDataActions = {
   setThemePreference: (theme: ThemePreference) => void;
   toggleAutoSync: () => void;
   toggleNotifications: () => void;
+  setHomeModulesOrder: (order: HomeModuleKey[]) => void;
+  setAdaptivePanelType: (panel: AdaptivePanelType) => void;
 };
 
 export const useMockDataStore = create<MockDataState & MockDataActions>((set) => ({
@@ -57,6 +68,10 @@ export const useMockDataStore = create<MockDataState & MockDataActions>((set) =>
     theme: 'system',
     autoSync: true,
     notifications: false,
+  },
+  homeLayout: {
+    order: ['hero', 'quickActions', 'processing', 'recentScans', 'adaptive'],
+    adaptivePanel: 'tags',
   },
   setThemePreference: (theme) =>
     set((state) => ({
@@ -77,6 +92,20 @@ export const useMockDataStore = create<MockDataState & MockDataActions>((set) =>
       preferences: {
         ...state.preferences,
         notifications: !state.preferences.notifications,
+      },
+    })),
+  setHomeModulesOrder: (order) =>
+    set((state) => ({
+      homeLayout: {
+        ...state.homeLayout,
+        order,
+      },
+    })),
+  setAdaptivePanelType: (panel) =>
+    set((state) => ({
+      homeLayout: {
+        ...state.homeLayout,
+        adaptivePanel: panel,
       },
     })),
 }));
