@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { ContentCard } from '@/components/ContentCard';
@@ -18,15 +18,30 @@ import { useMockDataStore } from '@/stores/useMockDataStore';
 export function SearchScreen() {
   const colors = useThemeColors();
   const router = useRouter();
+  const params = useLocalSearchParams<{ tag?: string }>();
   const { content, categories } = useMockDataStore();
-  const [query, setQuery] = useState('');
+  const initialTag = typeof params.tag === 'string' ? params.tag : '';
+  const [query, setQuery] = useState(initialTag);
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeTag, setActiveTag] = useState<string | null>(initialTag || null);
+
+  useEffect(() => {
+    if (typeof params.tag === 'string') {
+      setQuery(params.tag);
+      setActiveTag(params.tag);
+    }
+  }, [params.tag]);
 
   const filtered = content.filter((item) => {
-    const matchesQuery = item.title.toLowerCase().includes(query.toLowerCase());
+    const normalizedQuery = query.trim().toLowerCase();
+    const matchesQuery =
+      normalizedQuery.length === 0 ||
+      item.title.toLowerCase().includes(normalizedQuery) ||
+      item.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery));
     const matchesCategory =
       activeCategory === 'All' || item.category === activeCategory;
-    return matchesQuery && matchesCategory;
+    const matchesTag = !activeTag || item.tags.includes(activeTag);
+    return matchesQuery && matchesCategory && matchesTag;
   });
 
   return (
@@ -72,6 +87,20 @@ export function SearchScreen() {
           )}
           extraData={activeCategory}
         />
+        {activeTag ? (
+          <View style={styles.tagFilter}>
+            <Text style={{ color: colors.textMuted, marginRight: spacing.xs }}>Tag:</Text>
+            <TagChip label={activeTag} selected />
+            <TouchableOpacity
+              onPress={() => setActiveTag(null)}
+              style={{ marginLeft: spacing.sm }}
+              accessibilityRole="button"
+              accessibilityLabel="Clear tag filter"
+            >
+              <Text style={{ color: colors.primary, fontWeight: '600' }}>Clear</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
         <FlatList
           data={filtered}
           keyExtractor={(item) => item.id}
@@ -113,5 +142,10 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     fontSize: 16,
     borderWidth: 1,
+  },
+  tagFilter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
   },
 });

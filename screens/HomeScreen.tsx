@@ -121,6 +121,8 @@ export function HomeScreen() {
               setPanelType={setAdaptivePanelType}
               tags={tags}
               scans={scans}
+              onSelectTag={(tag) => router.push({ pathname: '/search', params: { tag } })}
+              onSelectPending={(scan) => router.push({ pathname: '/content-detail', params: { id: scan.id } })}
             />
           </View>
         );
