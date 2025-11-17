@@ -8,14 +8,10 @@ import { ThemePreference, useMockDataStore } from '@/stores/useMockDataStore';
 
 export function SettingsScreen() {
   const colors = useThemeColors();
-  const { preferences, setThemePreference, toggleAutoSync, toggleNotifications } = useMockDataStore(
-    (state) => ({
-      preferences: state.preferences,
-      setThemePreference: state.setThemePreference,
-      toggleAutoSync: state.toggleAutoSync,
-      toggleNotifications: state.toggleNotifications,
-    }),
-  );
+  const preferences = useMockDataStore((state) => state.preferences);
+  const setThemePreference = useMockDataStore((state) => state.setThemePreference);
+  const toggleAutoSync = useMockDataStore((state) => state.toggleAutoSync);
+  const toggleNotifications = useMockDataStore((state) => state.toggleNotifications);
 
   const themeOptions: Array<{ label: string; value: ThemePreference; description: string }> = [
     { label: 'System', value: 'system', description: 'Follow device appearance' },

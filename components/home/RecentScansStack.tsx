@@ -10,9 +10,13 @@ type Props = {
   onPressScan: (scan: ScanItem) => void;
 };
 
+const CARD_HEIGHT = 110;
+const STACK_OFFSET = 18;
+
 export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) {
   const colors = useThemeColors();
   const topScans = scans.slice(0, 3);
+  const stackHeight = CARD_HEIGHT + STACK_OFFSET * Math.max(topScans.length - 1, 0);
 
   if (topScans.length === 0) {
     return (
@@ -34,7 +38,7 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
           <Text style={{ color: colors.primary, fontWeight: '600' }}>View library</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.stackContainer} accessibilityRole="list">
+      <View style={[styles.stackContainer, { height: stackHeight }]} accessibilityRole="list">
         {topScans.map((scan, index) => (
           <TouchableOpacity
             key={scan.id}
@@ -42,7 +46,7 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
               styles.stackCard,
               {
                 backgroundColor: colors.surface,
-                top: index * 16,
+                top: index * STACK_OFFSET,
                 zIndex: topScans.length - index,
                 shadowOpacity: 0.08 + index * 0.02,
               },
@@ -95,6 +99,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     width: '100%',
+    height: CARD_HEIGHT,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 12,
