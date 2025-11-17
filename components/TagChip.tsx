@@ -1,4 +1,12 @@
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  AccessibilityRole,
+  AccessibilityState,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
 
@@ -6,10 +14,24 @@ type Props = {
   label: string;
   selected?: boolean;
   style?: StyleProp<ViewStyle>;
+  accessibilityRole?: AccessibilityRole;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityState?: AccessibilityState;
 };
 
-export function TagChip({ label, selected = false, style }: Props) {
+export function TagChip({
+  label,
+  selected = false,
+  style,
+  accessibilityLabel,
+  accessibilityRole,
+  accessibilityHint,
+  accessibilityState,
+}: Props) {
   const colors = useThemeColors();
+  const derivedState = selected ? { selected: true } : undefined;
+  const isAccessible = Boolean(accessibilityRole || accessibilityLabel || accessibilityHint || accessibilityState);
 
   return (
     <View
@@ -21,6 +43,11 @@ export function TagChip({ label, selected = false, style }: Props) {
           borderColor: selected ? colors.primary : colors.border,
         },
       ]}
+      accessible={isAccessible}
+      accessibilityRole={accessibilityRole}
+      accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityHint={accessibilityHint}
+      accessibilityState={accessibilityState ?? derivedState}
     >
       <Text
         style={[

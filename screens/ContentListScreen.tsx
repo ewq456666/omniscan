@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
@@ -11,25 +12,30 @@ export function ContentListScreen() {
   const { content } = useMockDataStore();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}> 
-      <Text style={[styles.title, { color: colors.text }]}>Library</Text>
-      <FlatList
-        data={content}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ContentCard
-            item={item}
-            onPress={() => router.push('/content-detail')}
-          />
-        )}
-        contentContainerStyle={{ paddingBottom: spacing.xxl }}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Library</Text>
+        <FlatList
+          data={content}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ContentCard
+              item={item}
+              onPress={() => router.push({ pathname: '/content-detail', params: { id: item.id } })}
+            />
+          )}
+          contentContainerStyle={{ paddingBottom: spacing.xxl }}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: spacing.lg,

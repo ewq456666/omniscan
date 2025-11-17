@@ -17,6 +17,14 @@ type AppStatus = {
   pendingUploads: number;
 };
 
+export type ThemePreference = 'system' | 'light' | 'dark';
+
+export type Preferences = {
+  theme: ThemePreference;
+  autoSync: boolean;
+  notifications: boolean;
+};
+
 type MockDataState = {
   scans: ScanItem[];
   content: ContentItem[];
@@ -25,9 +33,16 @@ type MockDataState = {
   tags: string[];
   categories: string[];
   appStatus: AppStatus;
+  preferences: Preferences;
 };
 
-export const useMockDataStore = create<MockDataState>((set) => ({
+type MockDataActions = {
+  setThemePreference: (theme: ThemePreference) => void;
+  toggleAutoSync: () => void;
+  toggleNotifications: () => void;
+};
+
+export const useMockDataStore = create<MockDataState & MockDataActions>((set) => ({
   scans: mockScans,
   content: mockContentItems,
   extractedFields: mockExtractedFields,
@@ -38,4 +53,30 @@ export const useMockDataStore = create<MockDataState>((set) => ({
     syncStatus: 'syncing',
     pendingUploads: 3,
   },
+  preferences: {
+    theme: 'system',
+    autoSync: true,
+    notifications: false,
+  },
+  setThemePreference: (theme) =>
+    set((state) => ({
+      preferences: {
+        ...state.preferences,
+        theme,
+      },
+    })),
+  toggleAutoSync: () =>
+    set((state) => ({
+      preferences: {
+        ...state.preferences,
+        autoSync: !state.preferences.autoSync,
+      },
+    })),
+  toggleNotifications: () =>
+    set((state) => ({
+      preferences: {
+        ...state.preferences,
+        notifications: !state.preferences.notifications,
+      },
+    })),
 }));

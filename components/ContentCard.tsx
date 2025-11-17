@@ -17,6 +17,9 @@ export function ContentCard({ item, onPress }: Props) {
       activeOpacity={0.85}
       onPress={onPress}
       style={[styles.container, { backgroundColor: colors.surface }]}
+      accessibilityRole="button"
+      accessibilityLabel={`${item.title}, ${item.category}`}
+      accessibilityHint="Opens content details"
     >
       <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
       <View style={styles.content}>

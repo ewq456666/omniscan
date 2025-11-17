@@ -28,6 +28,7 @@ export function QuickActionCard({
   const iconBackground = variant === 'primary'
     ? styles.iconPrimary.backgroundColor
     : accentColor ?? colors.primary;
+  const isInteractive = typeof onPress === 'function';
 
   const content = (
     <>
@@ -47,7 +48,14 @@ export function QuickActionCard({
   );
 
   return (
-    <TouchableOpacity activeOpacity={0.85} onPress={onPress}>
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={onPress}
+      accessibilityRole={isInteractive ? 'button' : undefined}
+      accessibilityLabel={title}
+      accessibilityHint={subtitle}
+      disabled={!isInteractive}
+    >
       {variant === 'primary' ? (
         <LinearGradient
           colors={gradients.capture}

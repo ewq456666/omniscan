@@ -9,6 +9,7 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colors = useThemeColors();
+  const statusBarStyle = colors.isDark ? 'light' : 'dark';
 
   return (
     <SafeAreaProvider>
@@ -27,7 +28,7 @@ export default function RootLayout() {
         <Stack.Screen name="content-detail" />
         <Stack.Screen name="content-edit" />
       </Stack>
-      <StatusBar style="light" />
+      <StatusBar style={statusBarStyle} backgroundColor={colors.background} />
     </SafeAreaProvider>
   );
 }

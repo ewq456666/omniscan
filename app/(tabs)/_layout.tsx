@@ -2,7 +2,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
 import { Tabs, useRouter } from 'expo-router';
 import { useThemeColors } from '@/hooks/useThemeColors';
-import { palette } from '@/theme/colors';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -24,8 +23,8 @@ export default function TabsLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
-          backgroundColor: palette.surface,
-          borderTopColor: palette.border,
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           height: 74,
           paddingBottom: 8,
         },

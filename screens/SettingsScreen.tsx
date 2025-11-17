@@ -1,61 +1,102 @@
-import { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { SectionHeader } from '@/components/SectionHeader';
+import { TagChip } from '@/components/TagChip';
+import { ThemePreference, useMockDataStore } from '@/stores/useMockDataStore';
 
 export function SettingsScreen() {
   const colors = useThemeColors();
-  const [darkMode, setDarkMode] = useState(true);
-  const [autoSync, setAutoSync] = useState(true);
-  const [notifications, setNotifications] = useState(false);
+  const { preferences, setThemePreference, toggleAutoSync, toggleNotifications } = useMockDataStore(
+    (state) => ({
+      preferences: state.preferences,
+      setThemePreference: state.setThemePreference,
+      toggleAutoSync: state.toggleAutoSync,
+      toggleNotifications: state.toggleNotifications,
+    }),
+  );
+
+  const themeOptions: Array<{ label: string; value: ThemePreference; description: string }> = [
+    { label: 'System', value: 'system', description: 'Follow device appearance' },
+    { label: 'Light', value: 'light', description: 'Bright surfaces, dark text' },
+    { label: 'Dark', value: 'dark', description: 'Dim surfaces, high contrast' },
+  ];
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={{ paddingBottom: spacing.xxl }}
-    >
-      <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        contentContainerStyle={{ paddingBottom: spacing.xxl }}
+        contentInsetAdjustmentBehavior="always"
+      >
+        <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
 
-      <SectionHeader title="Appearance" />
-      <View style={[styles.row, { backgroundColor: colors.surface }]}> 
-        <View>
-          <Text style={[styles.rowTitle, { color: colors.text }]}>Dark mode</Text>
-          <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}> 
-            Follows system preference
-          </Text>
+        <SectionHeader title="Appearance" />
+        <View style={[styles.row, { backgroundColor: colors.surface }]}>
+          <View>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>Theme</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
+              Choose how OmniScan renders surfaces
+            </Text>
+          </View>
         </View>
-        <Switch value={darkMode} onValueChange={setDarkMode} />
-      </View>
+        <View style={styles.themeOptions}>
+          {themeOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              onPress={() => setThemePreference(option.value)}
+              accessibilityRole="button"
+              accessibilityLabel={`${option.label} theme`}
+              accessibilityState={{ selected: preferences.theme === option.value }}
+              style={styles.themeChipWrapper}
+            >
+              <TagChip label={option.label} selected={preferences.theme === option.value} />
+              <Text style={[styles.themeDescription, { color: colors.textMuted }]}>
+                {option.description}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-      <SectionHeader title="Sync" />
-      <View style={[styles.row, { backgroundColor: colors.surface }]}> 
-        <View>
-          <Text style={[styles.rowTitle, { color: colors.text }]}>Auto Sync</Text>
-          <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}> 
-            Sync new scans when connected to Wi-Fi
-          </Text>
+        <SectionHeader title="Sync" />
+        <View style={[styles.row, { backgroundColor: colors.surface }]}>
+          <View>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>Auto Sync</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
+              Sync new scans when connected to Wi-Fi
+            </Text>
+          </View>
+          <Switch
+            value={preferences.autoSync}
+            onValueChange={toggleAutoSync}
+            accessibilityLabel="Toggle automatic sync"
+          />
         </View>
-        <Switch value={autoSync} onValueChange={setAutoSync} />
-      </View>
 
-      <SectionHeader title="Notifications" />
-      <View style={[styles.row, { backgroundColor: colors.surface }]}> 
-        <View>
-          <Text style={[styles.rowTitle, { color: colors.text }]}>
-            Smart reminders
-          </Text>
-          <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}> 
-            Get notified about pending reviews
-          </Text>
+        <SectionHeader title="Notifications" />
+        <View style={[styles.row, { backgroundColor: colors.surface }]}>
+          <View>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>Smart reminders</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
+              Get notified about pending reviews
+            </Text>
+          </View>
+          <Switch
+            value={preferences.notifications}
+            onValueChange={toggleNotifications}
+            accessibilityLabel="Toggle smart reminders"
+          />
         </View>
-        <Switch value={notifications} onValueChange={setNotifications} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: spacing.lg,
@@ -80,5 +121,19 @@ const styles = StyleSheet.create({
   rowSubtitle: {
     marginTop: spacing.xs,
     fontSize: 13,
+  },
+  themeOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    marginBottom: spacing.lg,
+  },
+  themeChipWrapper: {
+    width: '30%',
+    marginBottom: spacing.md,
+  },
+  themeDescription: {
+    marginTop: spacing.xs,
+    fontSize: 12,
   },
 });

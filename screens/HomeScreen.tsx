@@ -1,14 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { SectionHeader } from '@/components/SectionHeader';
@@ -19,7 +12,6 @@ import { useMockDataStore } from '@/stores/useMockDataStore';
 
 export function HomeScreen() {
   const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
   const router = useRouter();
   const { scans, appStatus } = useMockDataStore();
   const hasPendingUploads = appStatus.pendingUploads > 0;
@@ -84,84 +76,101 @@ export function HomeScreen() {
   ];
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={{ paddingBottom: spacing.xxl }}
-    >
-      <View style={{ height: insets.top }} />
-      <View style={styles.header}>
-        <View>
-          <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
-          <Text style={[styles.subtitle, { color: colors.textMuted }]}> 
-            OmniScan keeps your documents organized
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={[styles.syncBadge, { backgroundColor: colors.surface }]}
-        >
-          <MaterialCommunityIcons
-            name={appStatus.syncStatus === 'syncing' ? 'sync' : 'check-circle'}
-            color={colors.primary}
-            size={18}
-          />
-          <Text style={[styles.syncText, { color: colors.text }]}> 
-            {appStatus.pendingUploads} pending
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <FlatList
+        data={scans}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ScanItemCard item={item} />}
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: spacing.xxl, paddingHorizontal: spacing.lg }}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={
+          <View>
+            <View style={styles.header}>
+              <View>
+                <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
+                <Text style={[styles.subtitle, { color: colors.textMuted }]}>
+                  OmniScan keeps your documents organized
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.syncBadge, { backgroundColor: colors.surface }]}
+                onPress={() => router.push('/processing')}
+                accessibilityRole="button"
+                accessibilityLabel="View processing queue"
+                accessibilityHint="Opens the processing progress screen"
+              >
+                <MaterialCommunityIcons
+                  name={appStatus.syncStatus === 'syncing' ? 'sync' : 'check-circle'}
+                  color={colors.primary}
+                  size={18}
+                />
+                <Text style={[styles.syncText, { color: colors.text }]}>
+                  {appStatus.pendingUploads} pending
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-      <SectionHeader title="Quick Actions" />
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: spacing.md, paddingRight: spacing.lg }}
-      >
-        {quickActions.map((action) => (
-          <QuickActionCard
-            key={action.key}
-            title={action.title}
-            subtitle={action.subtitle}
-            icon={action.icon}
-            onPress={action.onPress}
-            variant={action.variant}
-            accentColor={action.accentColor}
-          />
-        ))}
-      </ScrollView>
+            <SectionHeader title="Quick Actions" />
+            <FlatList
+              data={quickActions}
+              horizontal
+              keyExtractor={(item) => item.key}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: spacing.md,
+                paddingRight: spacing.lg,
+              }}
+              renderItem={({ item }) => (
+                <QuickActionCard
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  icon={item.icon}
+                  onPress={item.onPress}
+                  variant={item.variant}
+                  accentColor={item.accentColor}
+                />
+              )}
+            />
 
-      <SectionHeader
-        title="Recent Scans"
-        action={
-          <TouchableOpacity onPress={() => router.push('/content-list')}>
-            <Text style={{ color: colors.primary }}>View All</Text>
-          </TouchableOpacity>
+            <SectionHeader
+              title="Recent Scans"
+              action={
+                <TouchableOpacity onPress={() => router.push('/content-list')}>
+                  <Text style={{ color: colors.primary }}>View All</Text>
+                </TouchableOpacity>
+              }
+            />
+          </View>
+        }
+        ListFooterComponent={
+          <View style={{ marginTop: spacing.xl }}>
+            <SectionHeader title="Suggested Tags" />
+            <FlatList
+              horizontal
+              data={scans.flatMap((scan) => scan.tags)}
+              keyExtractor={(item, index) => `${item}-${index}`}
+              renderItem={({ item }) => (
+                <View style={{ marginRight: spacing.sm }}>
+                  <TagChip label={item} />
+                </View>
+              )}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: spacing.lg }}
+            />
+          </View>
         }
       />
-      {scans.map((scan) => (
-        <ScanItemCard key={scan.id} item={scan} />
-      ))}
-
-      <SectionHeader title="Suggested Tags" />
-      <FlatList
-        horizontal
-        data={scans.flatMap((scan) => scan.tags)}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        renderItem={({ item }) => (
-          <View style={{ marginRight: spacing.sm }}>
-            <TagChip label={item} />
-          </View>
-        )}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: spacing.lg }}
-      />
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    paddingHorizontal: spacing.lg,
   },
   header: {
     paddingTop: spacing.xl,

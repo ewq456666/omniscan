@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
@@ -17,44 +18,56 @@ export function ResultsScreen() {
   const { extractedFields, tags } = useMockDataStore();
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={{ paddingBottom: spacing.xxl }}
-    >
-      <Text style={[styles.title, { color: colors.text }]}>Review Results</Text>
-      <View style={[styles.preview, { backgroundColor: colors.surface }]}> 
-        <Text style={{ color: colors.textMuted }}>Captured image preview</Text>
-      </View>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        contentContainerStyle={{ paddingBottom: spacing.xxl }}
+        contentInsetAdjustmentBehavior="automatic"
+      >
+        <Text style={[styles.title, { color: colors.text }]}>Review Results</Text>
+        <View style={[styles.preview, { backgroundColor: colors.surface }]}>
+          <Text style={{ color: colors.textMuted }}>Captured image preview</Text>
+        </View>
 
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>Extracted Fields</Text>
-      {extractedFields.map((field) => (
-        <FieldCard key={field.id} field={field} />
-      ))}
-
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>Suggested Tags</Text>
-      <View style={styles.tagGrid}>
-        {tags.map((tag) => (
-          <TagChip key={tag} label={tag} style={styles.tagChip} />
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Extracted Fields</Text>
+        {extractedFields.map((field) => (
+          <FieldCard key={field.id} field={field} />
         ))}
-      </View>
 
-      <View style={styles.actionsRow}>
-        <TouchableOpacity style={[styles.actionButton, { borderColor: colors.border }]}> 
-          <MaterialCommunityIcons name="share" color={colors.text} size={20} />
-          <Text style={[styles.actionText, { color: colors.text }]}>Share</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.actionButton, styles.actionButtonTrailing, { borderColor: colors.border }]}
-        >
-          <MaterialCommunityIcons name="content-save" color={colors.text} size={20} />
-          <Text style={[styles.actionText, { color: colors.text }]}>Save</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Suggested Tags</Text>
+        <View style={styles.tagGrid}>
+          {tags.map((tag) => (
+            <TagChip key={tag} label={tag} style={styles.tagChip} />
+          ))}
+        </View>
+
+        <View style={styles.actionsRow}>
+          <TouchableOpacity
+            style={[styles.actionButton, { borderColor: colors.border }]}
+            accessibilityRole="button"
+            accessibilityLabel="Share results"
+          >
+            <MaterialCommunityIcons name="share" color={colors.text} size={20} />
+            <Text style={[styles.actionText, { color: colors.text }]}>Share</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.actionButton, styles.actionButtonTrailing, { borderColor: colors.border }]}
+            accessibilityRole="button"
+            accessibilityLabel="Save results"
+          >
+            <MaterialCommunityIcons name="content-save" color={colors.text} size={20} />
+            <Text style={[styles.actionText, { color: colors.text }]}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     padding: spacing.lg,

@@ -1,5 +1,6 @@
 import { useColorScheme } from 'react-native';
 import { palette } from '@/theme/colors';
+import { useMockDataStore } from '@/stores/useMockDataStore';
 
 export type ThemeColors = {
   background: string;
@@ -12,11 +13,15 @@ export type ThemeColors = {
   secondary: string;
   success: string;
   warning: string;
+  isDark: boolean;
 };
 
 export const useThemeColors = (): ThemeColors => {
   const scheme = useColorScheme();
-  const isDark = scheme !== 'light';
+  const themePreference = useMockDataStore((state) => state.preferences.theme);
+  const systemScheme = scheme ?? 'light';
+  const resolvedScheme = themePreference === 'system' ? systemScheme : themePreference;
+  const isDark = resolvedScheme !== 'light';
 
   return {
     background: isDark ? palette.background : '#F3F4F6',
@@ -29,5 +34,6 @@ export const useThemeColors = (): ThemeColors => {
     secondary: palette.secondary,
     success: palette.success,
     warning: palette.warning,
+    isDark,
   };
 };
