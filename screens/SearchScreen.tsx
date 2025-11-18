@@ -21,7 +21,8 @@ export function SearchScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ tag?: string }>();
   const { t } = useTranslation();
-  const { content, categories } = useMockDataStore();
+  const content = useMockDataStore((state) => state.content);
+  const categories = useMockDataStore((state) => state.categories);
   const initialTag = typeof params.tag === 'string' ? params.tag : '';
   const [query, setQuery] = useState(initialTag);
   const [activeCategory, setActiveCategory] = useState<string>('All');
