@@ -12,11 +12,20 @@ type Props = {
   scans: ScanItem[];
   onSelectTag?: (tag: string) => void;
   onSelectPending?: (scan: ScanItem) => void;
+  onViewAllPending?: () => void;
 };
 
 const panelSequence: AdaptivePanelType[] = ['tags', 'pending'];
 
-export function AdaptivePanel({ panelType, setPanelType, tags, scans, onSelectTag, onSelectPending }: Props) {
+export function AdaptivePanel({
+  panelType,
+  setPanelType,
+  tags,
+  scans,
+  onSelectTag,
+  onSelectPending,
+  onViewAllPending,
+}: Props) {
   const colors = useThemeColors();
   const pendingScans = scans.filter((scan) => scan.status !== 'synced');
 
@@ -32,9 +41,21 @@ export function AdaptivePanel({ panelType, setPanelType, tags, scans, onSelectTa
         <Text style={[styles.title, { color: colors.text }]}>
           {panelType === 'tags' ? 'Suggested tags' : 'Pending reviews'}
         </Text>
-        <TouchableOpacity onPress={handleCycle} accessibilityRole="button" accessibilityLabel="Change panel content">
-          <Text style={{ color: colors.primary, fontWeight: '600' }}>Switch</Text>
-        </TouchableOpacity>
+        <View style={styles.actions}>
+          {panelType === 'pending' && pendingScans.length > 0 ? (
+            <TouchableOpacity
+              onPress={onViewAllPending}
+              accessibilityRole="button"
+              accessibilityLabel="View all pending reviews"
+              style={{ marginRight: spacing.md }}
+            >
+              <Text style={{ color: colors.textMuted, fontWeight: '600' }}>View all</Text>
+            </TouchableOpacity>
+          ) : null}
+          <TouchableOpacity onPress={handleCycle} accessibilityRole="button" accessibilityLabel="Change panel content">
+            <Text style={{ color: colors.primary, fontWeight: '600' }}>Switch</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {panelType === 'tags' ? (
@@ -100,6 +121,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: spacing.md,
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 17,

@@ -27,6 +27,7 @@ export function HomeScreen() {
   const setAdaptivePanelType = useMockDataStore((state) => state.setAdaptivePanelType);
 
   const modules: ModuleItem[] = homeLayout.order.map((key) => ({ key }));
+  const pendingScansCount = useMemo(() => scans.filter((scan) => scan.status !== 'synced').length, [scans]);
   const lastScanTitle = scans[0]?.title;
   const overallProgress =
     processingSteps.length === 0
@@ -70,8 +71,15 @@ export function HomeScreen() {
         icon: <MaterialCommunityIcons name="file-document-edit" size={22} color={colors.text} />,
         onPress: () => router.push('/results'),
       },
+      {
+        key: 'pending',
+        title: 'Pending reviews',
+        subtitle: `${pendingScansCount} waiting`,
+        icon: <MaterialCommunityIcons name="progress-alert" size={22} color={colors.text} />,
+        onPress: () => router.push('/pending-reviews'),
+      },
     ],
-    [appStatus.pendingUploads, colors.primary, colors.text, router],
+    [appStatus.pendingUploads, colors.primary, colors.text, router, pendingScansCount],
   );
 
   const renderModule = ({ item }: ListRenderItemInfo<ModuleItem>) => {
@@ -109,7 +117,7 @@ export function HomeScreen() {
             <RecentScansStack
               scans={scans}
               onPressLibrary={() => router.push('/content-list')}
-              onPressScan={(scan) => router.push({ pathname: '/content-detail', params: { id: scan.id } })}
+              onPressScan={(scan) => router.push({ pathname: '/content-detail', params: { scanId: scan.id } })}
             />
           </View>
         );
@@ -122,7 +130,8 @@ export function HomeScreen() {
               tags={tags}
               scans={scans}
               onSelectTag={(tag) => router.push({ pathname: '/search', params: { tag } })}
-              onSelectPending={(scan) => router.push({ pathname: '/content-detail', params: { id: scan.id } })}
+              onSelectPending={(scan) => router.push({ pathname: '/content-detail', params: { scanId: scan.id } })}
+              onViewAllPending={() => router.push('/pending-reviews')}
             />
           </View>
         );

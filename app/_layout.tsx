@@ -27,6 +27,7 @@ export default function RootLayout() {
         <Stack.Screen name="content-list" />
         <Stack.Screen name="content-detail" />
         <Stack.Screen name="content-edit" />
+        <Stack.Screen name="pending-reviews" />
       </Stack>
       <StatusBar style={statusBarStyle} backgroundColor={colors.background} />
     </SafeAreaProvider>
