@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { ContentItem } from '@/data/mockData';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
@@ -11,6 +12,8 @@ interface Props {
 
 export function ContentCard({ item, onPress }: Props) {
   const colors = useThemeColors();
+  const { t } = useTranslation();
+  const formattedDate = new Date(item.updatedAt).toLocaleDateString();
 
   return (
     <TouchableOpacity
@@ -18,8 +21,8 @@ export function ContentCard({ item, onPress }: Props) {
       onPress={onPress}
       style={[styles.container, { backgroundColor: colors.surface }]}
       accessibilityRole="button"
-      accessibilityLabel={`${item.title}, ${item.category}`}
-      accessibilityHint="Opens content details"
+      accessibilityLabel={t('common.accessibility.openItem', { title: item.title })}
+      accessibilityHint={t('common.accessibility.openContentDetails')}
     >
       <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
       <View style={styles.content}>
@@ -35,7 +38,7 @@ export function ContentCard({ item, onPress }: Props) {
           ))}
         </View>
         <Text style={[styles.updatedAt, { color: colors.textMuted }]}>
-          Updated {new Date(item.updatedAt).toLocaleDateString()}
+          {t('common.updated', { date: formattedDate })}
         </Text>
       </View>
     </TouchableOpacity>

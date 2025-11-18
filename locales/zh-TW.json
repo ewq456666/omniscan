@@ -1,0 +1,246 @@
+{
+  "common": {
+    "appName": "OmniScan",
+    "system": "系統",
+    "light": "淺色",
+    "dark": "深色",
+    "auto": "自動 (依系統)",
+    "english": "英文",
+    "traditionalChinese": "繁體中文",
+    "pendingCount": "{{count}} 筆待處理",
+    "tagLabel": "標籤：",
+    "clear": "清除",
+    "viewAll": "檢視全部",
+    "switch": "切換",
+    "openLibrary": "開啟資料庫",
+    "viewLibrary": "檢視資料庫",
+    "recentScans": "最近掃描",
+    "noScans": "尚未有掃描",
+    "captureFirst": "完成第一次掃描後會顯示在這裡。",
+    "allCaughtUp": "太棒了，全部完成！",
+    "noMatches": "沒有符合此篩選的項目。",
+    "noResults": "目前沒有結果，試著調整搜尋條件。",
+    "uncategorized": "未分類",
+    "updated": "更新時間 {{date}}",
+    "confidence": "信賴度 {{value}}%",
+    "languageDescriptions": {
+      "system": "依照裝置語言",
+      "english": "介面固定為英文",
+      "traditionalChinese": "顯示繁體中文介面"
+    },
+    "status": {
+      "processing": "處理中",
+      "error": "需要注意",
+      "synced": "已同步"
+    },
+    "accessibility": {
+      "filterBy": "依 {{value}} 篩選",
+      "reviewItem": "檢視 {{title}}",
+      "openItem": "開啟 {{title}}",
+      "changePanel": "切換面板內容",
+      "viewProcessing": "查看處理狀態",
+      "processingHint": "顯示詳細的處理流程",
+      "clearTagFilter": "清除標籤篩選",
+      "shareResults": "分享結果",
+      "saveResults": "儲存結果",
+      "editExtractedData": "編輯擷取資料",
+      "toggleSync": "切換自動同步",
+      "toggleNotifications": "切換智慧提醒",
+      "themeOption": "{{label}} 主題",
+      "languageOption": "{{label}} 語言",
+      "chooseScanType": "選擇 {{type}} 掃描模式",
+      "toggleFlash": "切換閃光燈",
+      "openGallery": "開啟相簿",
+      "captureType": "拍攝 {{type}}",
+      "openContentDetails": "開啟內容詳情"
+    }
+  },
+  "navigation": {
+    "tabs": {
+      "home": "首頁",
+      "scan": "掃描",
+      "search": "搜尋",
+      "settings": "設定"
+    }
+  },
+  "home": {
+    "welcomeTitle": "歡迎回來",
+    "welcomeSubtitle": "讓所有文件保持有序且可搜尋",
+    "syncBadge": "{{count}} 筆待處理",
+    "hero": {
+      "pendingTitle": "完成尚未處理的掃描",
+      "readyTitle": "準備好開始新的掃描了嗎？",
+      "pendingSubtitle_one": "你有 {{count}} 筆待上傳項目",
+      "pendingSubtitle_other": "你有 {{count}} 筆待上傳項目",
+      "lastScan": "上次掃描：{{title}}",
+      "emptySubtitle": "還沒有任何掃描，立即開始吧。",
+      "primaryPending": "檢視上傳項目",
+      "primaryReady": "開始掃描",
+      "secondaryPending": "再掃描一份",
+      "secondaryReady": "查看結果"
+    },
+    "quickActions": {
+      "capture": {
+        "titlePending": "繼續拍攝",
+        "titleReady": "開始掃描",
+        "subtitlePending": "{{count}} 筆待處理",
+        "subtitleReady": "由相機新增文件"
+      },
+      "import": {
+        "title": "匯入",
+        "subtitle": "自相簿加入"
+      },
+      "progress": {
+        "title": "追蹤進度",
+        "subtitle": "處理狀態"
+      },
+      "results": {
+        "title": "檢視最新結果",
+        "subtitle": "查看擷取內容"
+      },
+      "pending": {
+        "title": "待審閱",
+        "subtitle": "{{count}} 筆待處理"
+      }
+    },
+    "processingCapsule": {
+      "label": "處理狀態",
+      "value": "{{progress}}% 已完成"
+    },
+    "adaptivePanel": {
+      "tagsTitle": "建議標籤",
+      "pendingTitle": "待審閱",
+      "viewAll": "查看全部",
+      "switch": "切換",
+      "empty": "全部處理完畢！"
+    },
+    "recent": {
+      "heading": "最近掃描"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "sections": {
+      "appearance": "外觀",
+      "language": "語言",
+      "sync": "同步",
+      "notifications": "通知"
+    },
+    "theme": {
+      "label": "主題",
+      "description": "選擇 OmniScan 的介面風格",
+      "options": {
+        "system": {
+          "label": "系統",
+          "description": "依照裝置外觀設定"
+        },
+        "light": {
+          "label": "淺色",
+          "description": "淺色背景、深色文字"
+        },
+        "dark": {
+          "label": "深色",
+          "description": "深色背景、高對比"
+        }
+      }
+    },
+    "languagePreference": {
+      "label": "顯示語言",
+      "description": "設定應用程式的顯示語言",
+      "options": {
+        "system": {
+          "label": "自動 (依系統)",
+          "description": "依照裝置語言切換"
+        },
+        "en": {
+          "label": "English (EN)",
+          "description": "介面固定為英文"
+        },
+        "zh-TW": {
+          "label": "繁體中文 (ZH-TW)",
+          "description": "顯示繁體中文介面"
+        }
+      }
+    },
+    "autoSync": {
+      "label": "自動同步",
+      "description": "連上 Wi-Fi 時同步新的掃描"
+    },
+    "notifications": {
+      "label": "智慧提醒",
+      "description": "有待審閱項目時發出通知"
+    }
+  },
+  "search": {
+    "title": "搜尋",
+    "placeholder": "搜尋掃描、欄位或標籤",
+    "tagPrefix": "標籤：",
+    "clear": "清除",
+    "empty": "目前沒有結果，試著調整搜尋條件。",
+    "categories": {
+      "all": "全部",
+      "receipts": "收據",
+      "businessCard": "名片",
+      "notes": "筆記",
+      "documents": "文件"
+    }
+  },
+  "pending": {
+    "title": "待審閱",
+    "subtitle": "完成最新的掃描審閱即可保持同步。",
+    "filters": {
+      "all": "全部",
+      "processing": "處理中",
+      "error": "需要注意"
+    },
+    "emptyAll": "太棒了，全部完成！",
+    "emptyFiltered": "沒有符合此篩選的項目。"
+  },
+  "contentDetail": {
+    "noContent": "目前沒有可顯示的內容。",
+    "extractedHeading": "擷取資料",
+    "edit": "編輯",
+    "scanStatus": "掃描狀態",
+    "type": "類型",
+    "status": "狀態",
+    "captured": "拍攝時間",
+    "pendingNote": "此掃描尚未完成擷取，完成後請再次確認並儲存。"
+  },
+  "contentList": {
+    "title": "資料庫"
+  },
+  "gallery": {
+    "title": "圖庫"
+  },
+  "contentEdit": {
+    "title": "編輯中繼資料",
+    "noContent": "目前沒有可編輯的內容。",
+    "fields": {
+      "title": "標題",
+      "category": "分類",
+      "tags": "標籤"
+    },
+    "helper": "此模擬流程會自動儲存變更。"
+  },
+  "results": {
+    "title": "檢視結果",
+    "preview": "影像預覽",
+    "extracted": "擷取欄位",
+    "suggestedTags": "建議標籤",
+    "share": "分享",
+    "save": "儲存"
+  },
+  "processing": {
+    "title": "處理中",
+    "overall": "整體進度"
+  },
+  "camera": {
+    "preview": "相機預覽 (模擬)",
+    "scanTypes": {
+      "auto": "自動偵測",
+      "businessCard": "名片",
+      "receipt": "收據",
+      "note": "筆記"
+    }
+  }
+}

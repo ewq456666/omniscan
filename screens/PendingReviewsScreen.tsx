@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { TagChip } from '@/components/TagChip';
@@ -15,15 +16,16 @@ dayjs.extend(relativeTime);
 type PendingStatus = Extract<ScanItem['status'], 'processing' | 'error'>;
 
 const filters = [
-  { label: 'All', value: 'all' },
-  { label: 'Processing', value: 'processing' },
-  { label: 'Needs attention', value: 'error' },
+  { labelKey: 'all', value: 'all' },
+  { labelKey: 'processing', value: 'processing' },
+  { labelKey: 'error', value: 'error' },
 ] as const;
 
 type FilterValue = (typeof filters)[number]['value'];
 
 export function PendingReviewsScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ id?: string }>();
   const scans = useMockDataStore((state) => state.scans);
@@ -36,13 +38,12 @@ export function PendingReviewsScreen() {
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.title, { color: colors.text }]}>Pending reviews</Text>
-        <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-          Finish reviewing your latest captures to keep everything synced.
-        </Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('pending.title')}</Text>
+        <Text style={[styles.subtitle, { color: colors.textMuted }]}>{t('pending.subtitle')}</Text>
 
         <View style={styles.filtersRow}>
-          {filters.map(({ label, value }) => {
+          {filters.map(({ labelKey, value }) => {
+            const label = t(`pending.filters.${labelKey}`);
             const isActive = filter === value;
             return (
               <TouchableOpacity
@@ -50,7 +51,7 @@ export function PendingReviewsScreen() {
                 onPress={() => setFilter(value)}
                 style={{ marginRight: spacing.sm }}
                 accessibilityRole="button"
-                accessibilityLabel={`Filter ${label}`}
+                accessibilityLabel={t('common.accessibility.filterBy', { value: label })}
                 accessibilityState={{ selected: isActive }}
               >
                 <TagChip label={label} selected={isActive} />
@@ -67,8 +68,8 @@ export function PendingReviewsScreen() {
           ListEmptyComponent={
             <Text style={{ color: colors.textMuted, marginTop: spacing.xl }}>
               {pendingScans.length === 0
-                ? 'You are all caught up.'
-                : 'No items match this filter.'}
+                ? t('pending.emptyAll')
+                : t('pending.emptyFiltered')}
             </Text>
           }
           renderItem={({ item }) => (
@@ -82,7 +83,7 @@ export function PendingReviewsScreen() {
               ]}
               onPress={() => router.push({ pathname: '/content-detail', params: { scanId: item.id } })}
               accessibilityRole="button"
-              accessibilityLabel={`Open ${item.title}`}
+              accessibilityLabel={t('common.accessibility.openItem', { title: item.title })}
             >
               <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
               <View style={styles.cardBody}>
@@ -109,8 +110,9 @@ export function PendingReviewsScreen() {
 
 function StatusPill({ status }: { status: PendingStatus }) {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const backgroundColor = status === 'processing' ? colors.warning : '#EF4444';
-  const label = status === 'processing' ? 'Processing' : 'Needs attention';
+  const label = t(`common.status.${status}`);
   return (
     <View style={[styles.statusPill, { backgroundColor }]}>
       <Text style={styles.statusLabel}>{label}</Text>

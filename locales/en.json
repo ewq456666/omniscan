@@ -1,0 +1,246 @@
+{
+  "common": {
+    "appName": "OmniScan",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "auto": "Auto (System)",
+    "english": "English",
+    "traditionalChinese": "Traditional Chinese",
+    "pendingCount": "{{count}} pending",
+    "tagLabel": "Tag:",
+    "clear": "Clear",
+    "viewAll": "View all",
+    "switch": "Switch",
+    "openLibrary": "Open Library",
+    "viewLibrary": "View library",
+    "recentScans": "Recent scans",
+    "noScans": "No scans yet",
+    "captureFirst": "Capture your first document to see it here.",
+    "allCaughtUp": "You are all caught up.",
+    "noMatches": "No items match this filter.",
+    "noResults": "No results yet. Try adjusting your filters.",
+    "uncategorized": "Uncategorized",
+    "updated": "Updated {{date}}",
+    "confidence": "Confidence {{value}}%",
+    "languageDescriptions": {
+      "system": "Match your device language",
+      "english": "Force the interface to English",
+      "traditionalChinese": "Show the interface in Traditional Chinese"
+    },
+    "status": {
+      "processing": "Processing",
+      "error": "Needs attention",
+      "synced": "Synced"
+    },
+    "accessibility": {
+      "filterBy": "Filter by {{value}}",
+      "reviewItem": "Review {{title}}",
+      "openItem": "Open {{title}}",
+      "changePanel": "Change panel content",
+      "viewProcessing": "View processing status",
+      "processingHint": "Shows detailed processing steps",
+      "clearTagFilter": "Clear tag filter",
+      "shareResults": "Share results",
+      "saveResults": "Save results",
+      "editExtractedData": "Edit extracted data",
+      "toggleSync": "Toggle automatic sync",
+      "toggleNotifications": "Toggle smart reminders",
+      "themeOption": "{{label}} theme",
+      "languageOption": "{{label}} language",
+      "chooseScanType": "Choose {{type}} scan type",
+      "toggleFlash": "Toggle flash",
+      "openGallery": "Open gallery",
+      "captureType": "Capture {{type}}",
+      "openContentDetails": "Opens content details"
+    }
+  },
+  "navigation": {
+    "tabs": {
+      "home": "Home",
+      "scan": "Scan",
+      "search": "Search",
+      "settings": "Settings"
+    }
+  },
+  "home": {
+    "welcomeTitle": "Welcome back",
+    "welcomeSubtitle": "Keep your documents organized and searchable",
+    "syncBadge": "{{count}} pending",
+    "hero": {
+      "pendingTitle": "Finish outstanding captures",
+      "readyTitle": "Ready for a new scan?",
+      "pendingSubtitle_one": "You have {{count}} pending upload",
+      "pendingSubtitle_other": "You have {{count}} pending uploads",
+      "lastScan": "Last scan: {{title}}",
+      "emptySubtitle": "No scans yet. Capture your first document.",
+      "primaryPending": "Review uploads",
+      "primaryReady": "Start scan",
+      "secondaryPending": "Start another scan",
+      "secondaryReady": "View results"
+    },
+    "quickActions": {
+      "capture": {
+        "titlePending": "Resume capture",
+        "titleReady": "Start scan",
+        "subtitlePending": "{{count}} pending",
+        "subtitleReady": "Capture a new document"
+      },
+      "import": {
+        "title": "Import",
+        "subtitle": "Add from gallery"
+      },
+      "progress": {
+        "title": "Track progress",
+        "subtitle": "Processing status"
+      },
+      "results": {
+        "title": "Review latest",
+        "subtitle": "Inspect extraction"
+      },
+      "pending": {
+        "title": "Pending reviews",
+        "subtitle": "{{count}} waiting"
+      }
+    },
+    "processingCapsule": {
+      "label": "Processing",
+      "value": "{{progress}}% complete"
+    },
+    "adaptivePanel": {
+      "tagsTitle": "Suggested tags",
+      "pendingTitle": "Pending reviews",
+      "viewAll": "View all",
+      "switch": "Switch",
+      "empty": "All caught up!"
+    },
+    "recent": {
+      "heading": "Recent scans"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "appearance": "Appearance",
+      "language": "Language",
+      "sync": "Sync",
+      "notifications": "Notifications"
+    },
+    "theme": {
+      "label": "Theme",
+      "description": "Choose how OmniScan renders surfaces",
+      "options": {
+        "system": {
+          "label": "System",
+          "description": "Follow device appearance"
+        },
+        "light": {
+          "label": "Light",
+          "description": "Bright surfaces, dark text"
+        },
+        "dark": {
+          "label": "Dark",
+          "description": "Dim surfaces, high contrast"
+        }
+      }
+    },
+    "languagePreference": {
+      "label": "Display language",
+      "description": "Control the language used across the app",
+      "options": {
+        "system": {
+          "label": "Auto (System)",
+          "description": "Match your device language"
+        },
+        "en": {
+          "label": "English (EN)",
+          "description": "Force the interface to English"
+        },
+        "zh-TW": {
+          "label": "繁體中文 (ZH-TW)",
+          "description": "Show the interface in Traditional Chinese"
+        }
+      }
+    },
+    "autoSync": {
+      "label": "Auto Sync",
+      "description": "Sync new scans when connected to Wi-Fi"
+    },
+    "notifications": {
+      "label": "Smart reminders",
+      "description": "Get notified about pending reviews"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search scans, fields or tags",
+    "tagPrefix": "Tag:",
+    "clear": "Clear",
+    "empty": "No results yet. Try adjusting your filters.",
+    "categories": {
+      "all": "All",
+      "receipts": "Receipts",
+      "businessCard": "Business Cards",
+      "notes": "Notes",
+      "documents": "Documents"
+    }
+  },
+  "pending": {
+    "title": "Pending reviews",
+    "subtitle": "Finish reviewing your latest captures to keep everything synced.",
+    "filters": {
+      "all": "All",
+      "processing": "Processing",
+      "error": "Needs attention"
+    },
+    "emptyAll": "You are all caught up.",
+    "emptyFiltered": "No items match this filter."
+  },
+  "contentDetail": {
+    "noContent": "No content available.",
+    "extractedHeading": "Extracted Data",
+    "edit": "Edit",
+    "scanStatus": "Scan status",
+    "type": "Type",
+    "status": "Status",
+    "captured": "Captured",
+    "pendingNote": "This scan has not been fully extracted yet. Review and save it once extraction completes."
+  },
+  "contentList": {
+    "title": "Library"
+  },
+  "gallery": {
+    "title": "Gallery"
+  },
+  "contentEdit": {
+    "title": "Edit Metadata",
+    "noContent": "No content to edit.",
+    "fields": {
+      "title": "Title",
+      "category": "Category",
+      "tags": "Tags"
+    },
+    "helper": "Changes are saved automatically in this mock flow."
+  },
+  "results": {
+    "title": "Review Results",
+    "preview": "Captured image preview",
+    "extracted": "Extracted Fields",
+    "suggestedTags": "Suggested Tags",
+    "share": "Share",
+    "save": "Save"
+  },
+  "processing": {
+    "title": "Processing",
+    "overall": "Overall progress"
+  },
+  "camera": {
+    "preview": "Camera preview (mock)",
+    "scanTypes": {
+      "auto": "Auto Detect",
+      "businessCard": "Business Card",
+      "receipt": "Receipt",
+      "note": "Note"
+    }
+  }
+}

@@ -3,15 +3,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { TagChip } from '@/components/TagChip';
 
-const scanTypes = ['Auto Detect', 'Business Card', 'Receipt', 'Note'];
+const scanTypes = ['auto', 'businessCard', 'receipt', 'note'] as const;
+type ScanTypeKey = (typeof scanTypes)[number];
 
 export function CameraScreen() {
   const colors = useThemeColors();
-  const [activeScanType, setActiveScanType] = useState(scanTypes[0]);
+  const { t } = useTranslation();
+  const [activeScanType, setActiveScanType] = useState<ScanTypeKey>(scanTypes[0]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -19,46 +22,48 @@ export function CameraScreen() {
         <LinearGradient colors={['rgba(37,99,235,0.2)', 'transparent']} style={styles.gradient} />
         <View style={[styles.preview, { borderColor: colors.primary }]}>
           <Text style={[styles.previewText, { color: colors.textMuted }]}>
-            Camera preview (mock)
+            {t('camera.preview')}
           </Text>
         </View>
       </View>
       <View style={styles.scanTypeRow}>
-        {scanTypes.map((type) => (
-          <TouchableOpacity
-            key={type}
-            style={styles.scanTag}
-            onPress={() => setActiveScanType(type)}
-            accessibilityRole="button"
-            accessibilityLabel={`Choose ${type} scan type`}
-            accessibilityState={{ selected: activeScanType === type }}
-          >
-            <TagChip
-              label={type}
-              selected={activeScanType === type}
-            />
-          </TouchableOpacity>
-        ))}
+        {scanTypes.map((type) => {
+          const label = t(`camera.scanTypes.${type}`);
+          return (
+            <TouchableOpacity
+              key={type}
+              style={styles.scanTag}
+              onPress={() => setActiveScanType(type)}
+              accessibilityRole="button"
+              accessibilityLabel={t('common.accessibility.chooseScanType', { type: label })}
+              accessibilityState={{ selected: activeScanType === type }}
+            >
+              <TagChip label={label} selected={activeScanType === type} />
+            </TouchableOpacity>
+          );
+        })}
       </View>
       <View style={styles.controls}>
         <TouchableOpacity
           style={styles.controlButton}
           accessibilityRole="button"
-          accessibilityLabel="Toggle flash"
+          accessibilityLabel={t('common.accessibility.toggleFlash')}
         >
           <MaterialCommunityIcons name="flash" color={colors.text} size={26} />
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.shutter, { borderColor: colors.primary }]}
           accessibilityRole="button"
-          accessibilityLabel={`Capture ${activeScanType}`}
+          accessibilityLabel={t('common.accessibility.captureType', {
+            type: t(`camera.scanTypes.${activeScanType}`),
+          })}
         >
           <View style={[styles.shutterInner, { backgroundColor: colors.primary }]} />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.controlButton}
           accessibilityRole="button"
-          accessibilityLabel="Open gallery"
+          accessibilityLabel={t('common.accessibility.openGallery')}
         >
           <MaterialCommunityIcons name="image" color={colors.text} size={26} />
         </TouchableOpacity>

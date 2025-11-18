@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
@@ -15,6 +16,7 @@ import { TagChip } from '@/components/TagChip';
 
 export function ResultsScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const { extractedFields, tags } = useMockDataStore();
 
   return (
@@ -24,17 +26,17 @@ export function ResultsScreen() {
         contentContainerStyle={{ paddingBottom: spacing.xxl }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <Text style={[styles.title, { color: colors.text }]}>Review Results</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('results.title')}</Text>
         <View style={[styles.preview, { backgroundColor: colors.surface }]}>
-          <Text style={{ color: colors.textMuted }}>Captured image preview</Text>
+          <Text style={{ color: colors.textMuted }}>{t('results.preview')}</Text>
         </View>
 
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Extracted Fields</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('results.extracted')}</Text>
         {extractedFields.map((field) => (
           <FieldCard key={field.id} field={field} />
         ))}
 
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Suggested Tags</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('results.suggestedTags')}</Text>
         <View style={styles.tagGrid}>
           {tags.map((tag) => (
             <TagChip key={tag} label={tag} style={styles.tagChip} />
@@ -45,18 +47,18 @@ export function ResultsScreen() {
           <TouchableOpacity
             style={[styles.actionButton, { borderColor: colors.border }]}
             accessibilityRole="button"
-            accessibilityLabel="Share results"
+            accessibilityLabel={t('common.accessibility.shareResults')}
           >
             <MaterialCommunityIcons name="share" color={colors.text} size={20} />
-            <Text style={[styles.actionText, { color: colors.text }]}>Share</Text>
+            <Text style={[styles.actionText, { color: colors.text }]}>{t('results.share')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionButton, styles.actionButtonTrailing, { borderColor: colors.border }]}
             accessibilityRole="button"
-            accessibilityLabel="Save results"
+            accessibilityLabel={t('common.accessibility.saveResults')}
           >
             <MaterialCommunityIcons name="content-save" color={colors.text} size={20} />
-            <Text style={[styles.actionText, { color: colors.text }]}>Save</Text>
+            <Text style={[styles.actionText, { color: colors.text }]}>{t('results.save')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

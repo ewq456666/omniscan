@@ -3,6 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList, ListRenderItemInfo, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { HeroInsightCard } from '@/components/home/HeroInsightCard';
@@ -19,6 +20,7 @@ type ModuleItem = {
 export function HomeScreen() {
   const colors = useThemeColors();
   const router = useRouter();
+  const { t } = useTranslation();
   const scans = useMockDataStore((state) => state.scans);
   const appStatus = useMockDataStore((state) => state.appStatus);
   const processingSteps = useMockDataStore((state) => state.processingSteps);
@@ -40,11 +42,14 @@ export function HomeScreen() {
     () => [
       {
         key: 'capture',
-        title: appStatus.pendingUploads > 0 ? 'Resume capture' : 'Start scan',
+        title:
+          appStatus.pendingUploads > 0
+            ? t('home.quickActions.capture.titlePending')
+            : t('home.quickActions.capture.titleReady'),
         subtitle:
           appStatus.pendingUploads > 0
-            ? `${appStatus.pendingUploads} pending`
-            : 'Capture a new document',
+            ? t('home.quickActions.capture.subtitlePending', { count: appStatus.pendingUploads })
+            : t('home.quickActions.capture.subtitleReady'),
         icon: <MaterialCommunityIcons name="camera" size={24} color="#FFFFFF" />,
         onPress: () => router.push('/camera'),
         accentColor: colors.primary,
@@ -52,34 +57,34 @@ export function HomeScreen() {
       },
       {
         key: 'import',
-        title: 'Import',
-        subtitle: 'Add from gallery',
+        title: t('home.quickActions.import.title'),
+        subtitle: t('home.quickActions.import.subtitle'),
         icon: <MaterialCommunityIcons name="image-multiple" size={22} color={colors.text} />,
         onPress: () => router.push('/gallery'),
       },
       {
         key: 'progress',
-        title: 'Track progress',
-        subtitle: 'Processing status',
+        title: t('home.quickActions.progress.title'),
+        subtitle: t('home.quickActions.progress.subtitle'),
         icon: <MaterialCommunityIcons name="progress-check" size={22} color={colors.text} />,
         onPress: () => router.push('/processing'),
       },
       {
         key: 'results',
-        title: 'Review latest',
-        subtitle: 'Inspect extraction',
+        title: t('home.quickActions.results.title'),
+        subtitle: t('home.quickActions.results.subtitle'),
         icon: <MaterialCommunityIcons name="file-document-edit" size={22} color={colors.text} />,
         onPress: () => router.push('/results'),
       },
       {
         key: 'pending',
-        title: 'Pending reviews',
-        subtitle: `${pendingScansCount} waiting`,
+        title: t('home.quickActions.pending.title'),
+        subtitle: t('home.quickActions.pending.subtitle', { count: pendingScansCount }),
         icon: <MaterialCommunityIcons name="progress-alert" size={22} color={colors.text} />,
         onPress: () => router.push('/pending-reviews'),
       },
     ],
-    [appStatus.pendingUploads, colors.primary, colors.text, router, pendingScansCount],
+    [appStatus.pendingUploads, colors.primary, colors.text, pendingScansCount, router, t],
   );
 
   const renderModule = ({ item }: ListRenderItemInfo<ModuleItem>) => {
@@ -156,10 +161,8 @@ export function HomeScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <View>
-              <Text style={[styles.title, { color: colors.text }]}>Welcome back</Text>
-              <Text style={[styles.subtitle, { color: colors.textMuted }]}>
-                Keep your documents organized and searchable
-              </Text>
+              <Text style={[styles.title, { color: colors.text }]}>{t('home.welcomeTitle')}</Text>
+              <Text style={[styles.subtitle, { color: colors.textMuted }]}>{t('home.welcomeSubtitle')}</Text>
             </View>
             <View style={[styles.syncBadge, { backgroundColor: colors.surface }]}>
               <MaterialCommunityIcons
@@ -168,7 +171,7 @@ export function HomeScreen() {
                 size={18}
               />
               <Text style={[styles.syncText, { color: colors.text }]}>
-                {appStatus.pendingUploads} pending
+                {t('home.syncBadge', { count: appStatus.pendingUploads })}
               </Text>
             </View>
           </View>

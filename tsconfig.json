@@ -3,13 +3,17 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@/components/*": ["components/*"],
       "@/screens/*": ["screens/*"],
       "@/data/*": ["data/*"],
       "@/stores/*": ["stores/*"],
       "@/theme/*": ["theme/*"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/providers/*": ["providers/*"],
+      "@/locales/*": ["locales/*"],
+      "@/i18n/*": ["i18n/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "App.tsx"],

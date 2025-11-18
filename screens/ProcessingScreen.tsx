@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
@@ -7,6 +8,7 @@ import { ProcessingStepItem } from '@/components/ProcessingStepItem';
 
 export function ProcessingScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const { processingSteps } = useMockDataStore();
   const total = processingSteps.reduce((sum, step) => sum + step.progress, 0);
   const overallProgress = processingSteps.length === 0 ? 0 : Math.round((total / processingSteps.length) * 100);
@@ -18,10 +20,10 @@ export function ProcessingScreen() {
         contentContainerStyle={{ paddingBottom: spacing.xxl }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <Text style={[styles.title, { color: colors.text }]}>Processing</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('processing.title')}</Text>
         <View style={[styles.summary, { backgroundColor: colors.surface }]}>
           <Text style={[styles.summaryLabel, { color: colors.textMuted }]}>
-            Overall progress
+            {t('processing.overall')}
           </Text>
           <Text style={[styles.summaryValue, { color: colors.text }]}>
             {overallProgress}%

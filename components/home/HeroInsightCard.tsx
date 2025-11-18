@@ -1,5 +1,6 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { spacing } from '@/theme/spacing';
 
 type Props = {
@@ -15,15 +16,16 @@ export function HeroInsightCard({
   onPrimaryAction,
   onSecondaryAction,
 }: Props) {
+  const { t } = useTranslation();
   const hasPending = pendingUploads > 0;
-  const title = hasPending ? 'Finish outstanding captures' : 'Ready for a new scan?';
+  const title = hasPending ? t('home.hero.pendingTitle') : t('home.hero.readyTitle');
   const subtitle = hasPending
-    ? `You have ${pendingUploads} pending ${pendingUploads === 1 ? 'upload' : 'uploads'}`
+    ? t('home.hero.pendingSubtitle', { count: pendingUploads })
     : lastScanTitle
-      ? `Last scan: ${lastScanTitle}`
-      : 'No scans yet. Capture your first document.';
-  const primaryLabel = hasPending ? 'Review uploads' : 'Start scan';
-  const secondaryLabel = hasPending ? 'Start another scan' : 'View results';
+      ? t('home.hero.lastScan', { title: lastScanTitle })
+      : t('home.hero.emptySubtitle');
+  const primaryLabel = hasPending ? t('home.hero.primaryPending') : t('home.hero.primaryReady');
+  const secondaryLabel = hasPending ? t('home.hero.secondaryPending') : t('home.hero.secondaryReady');
 
   return (
     <LinearGradient colors={['#1E3A8A', '#7C3AED']} style={styles.container} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}>

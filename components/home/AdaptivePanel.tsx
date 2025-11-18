@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { TagChip } from '@/components/TagChip';
@@ -27,6 +28,7 @@ export function AdaptivePanel({
   onViewAllPending,
 }: Props) {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const pendingScans = scans.filter((scan) => scan.status !== 'synced');
 
   const handleCycle = () => {
@@ -39,21 +41,25 @@ export function AdaptivePanel({
     <View style={[styles.container, { backgroundColor: colors.surface }]}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>
-          {panelType === 'tags' ? 'Suggested tags' : 'Pending reviews'}
+          {panelType === 'tags' ? t('home.adaptivePanel.tagsTitle') : t('home.adaptivePanel.pendingTitle')}
         </Text>
         <View style={styles.actions}>
           {panelType === 'pending' && pendingScans.length > 0 ? (
             <TouchableOpacity
               onPress={onViewAllPending}
               accessibilityRole="button"
-              accessibilityLabel="View all pending reviews"
+              accessibilityLabel={t('home.adaptivePanel.viewAll')}
               style={{ marginRight: spacing.md }}
             >
-              <Text style={{ color: colors.textMuted, fontWeight: '600' }}>View all</Text>
+              <Text style={{ color: colors.textMuted, fontWeight: '600' }}>{t('home.adaptivePanel.viewAll')}</Text>
             </TouchableOpacity>
           ) : null}
-          <TouchableOpacity onPress={handleCycle} accessibilityRole="button" accessibilityLabel="Change panel content">
-            <Text style={{ color: colors.primary, fontWeight: '600' }}>Switch</Text>
+          <TouchableOpacity
+            onPress={handleCycle}
+            accessibilityRole="button"
+            accessibilityLabel={t('common.accessibility.changePanel')}
+          >
+            <Text style={{ color: colors.primary, fontWeight: '600' }}>{t('home.adaptivePanel.switch')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -65,7 +71,7 @@ export function AdaptivePanel({
               key={tag}
               onPress={() => onSelectTag?.(tag)}
               accessibilityRole="button"
-              accessibilityLabel={`Filter by ${tag}`}
+              accessibilityLabel={t('common.accessibility.filterBy', { value: tag })}
             >
               <TagChip label={tag} style={styles.tagChip} />
             </TouchableOpacity>
@@ -74,7 +80,7 @@ export function AdaptivePanel({
       ) : (
         <View>
           {pendingScans.length === 0 ? (
-            <Text style={{ color: colors.textMuted }}>All caught up!</Text>
+            <Text style={{ color: colors.textMuted }}>{t('home.adaptivePanel.empty')}</Text>
           ) : (
             pendingScans.slice(0, 3).map((scan, index) => (
               <TouchableOpacity
@@ -85,7 +91,7 @@ export function AdaptivePanel({
                 ]}
                 onPress={() => onSelectPending?.(scan)}
                 accessibilityRole="button"
-                accessibilityLabel={`Review ${scan.title}`}
+                accessibilityLabel={t('common.accessibility.reviewItem', { title: scan.title })}
               >
                 <View
                   style={[
@@ -101,7 +107,9 @@ export function AdaptivePanel({
                     {scan.subtitle}
                   </Text>
                 </View>
-                <Text style={{ color: colors.textMuted, fontSize: 12, marginLeft: spacing.sm }}>{scan.status}</Text>
+                <Text style={{ color: colors.textMuted, fontSize: 12, marginLeft: spacing.sm }}>
+                  {t(`common.status.${scan.status}`)}
+                </Text>
               </TouchableOpacity>
             ))
           )}

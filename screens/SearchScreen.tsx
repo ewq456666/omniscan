@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { ContentCard } from '@/components/ContentCard';
@@ -19,6 +20,7 @@ export function SearchScreen() {
   const colors = useThemeColors();
   const router = useRouter();
   const params = useLocalSearchParams<{ tag?: string }>();
+  const { t } = useTranslation();
   const { content, categories } = useMockDataStore();
   const initialTag = typeof params.tag === 'string' ? params.tag : '';
   const [query, setQuery] = useState(initialTag);
@@ -44,16 +46,29 @@ export function SearchScreen() {
     return matchesQuery && matchesCategory && matchesTag;
   });
 
+  const categoryKeyMap: Record<string, string> = {
+    All: 'all',
+    Receipts: 'receipts',
+    'Business Cards': 'businessCard',
+    Notes: 'notes',
+    Documents: 'documents',
+  };
+
+  const getCategoryLabel = (value: string) => {
+    const key = categoryKeyMap[value];
+    return key ? t(`search.categories.${key}`) : value;
+  };
+
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.title, { color: colors.text }]}>Search</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('search.title')}</Text>
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Search scans, fields or tags"
+          placeholder={t('search.placeholder')}
           placeholderTextColor={colors.textMuted}
-          accessibilityLabel="Search scans, fields or tags"
+          accessibilityLabel={t('search.placeholder')}
           style={[
             styles.input,
             {
@@ -76,11 +91,11 @@ export function SearchScreen() {
                 setActiveCategory((current) => (current === item ? 'All' : item))
               }
               accessibilityRole="button"
-              accessibilityLabel={`Filter by ${item}`}
+              accessibilityLabel={t('common.accessibility.filterBy', { value: getCategoryLabel(item) })}
               accessibilityState={{ selected: item === activeCategory }}
             >
               <TagChip
-                label={item}
+                label={getCategoryLabel(item)}
                 selected={item === activeCategory}
               />
             </TouchableOpacity>
@@ -89,15 +104,15 @@ export function SearchScreen() {
         />
         {activeTag ? (
           <View style={styles.tagFilter}>
-            <Text style={{ color: colors.textMuted, marginRight: spacing.xs }}>Tag:</Text>
+            <Text style={{ color: colors.textMuted, marginRight: spacing.xs }}>{t('search.tagPrefix')}</Text>
             <TagChip label={activeTag} selected />
             <TouchableOpacity
               onPress={() => setActiveTag(null)}
               style={{ marginLeft: spacing.sm }}
               accessibilityRole="button"
-              accessibilityLabel="Clear tag filter"
+              accessibilityLabel={t('common.accessibility.clearTagFilter')}
             >
-              <Text style={{ color: colors.primary, fontWeight: '600' }}>Clear</Text>
+              <Text style={{ color: colors.primary, fontWeight: '600' }}>{t('search.clear')}</Text>
             </TouchableOpacity>
           </View>
         ) : null}
@@ -114,7 +129,7 @@ export function SearchScreen() {
           contentContainerStyle={{ paddingBottom: spacing.xxl }}
           ListEmptyComponent={
             <Text style={{ color: colors.textMuted, marginTop: spacing.lg }}>
-              No results yet. Try adjusting your filters.
+              {t('search.empty')}
             </Text>
           }
         />

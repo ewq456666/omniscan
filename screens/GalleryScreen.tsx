@@ -1,17 +1,19 @@
 import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
 
 export function GalleryScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const { scans } = useMockDataStore();
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.title, { color: colors.text }]}>Gallery</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('gallery.title')}</Text>
         <FlatList
           data={scans}
           numColumns={2}

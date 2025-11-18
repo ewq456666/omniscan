@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ComponentProps } from 'react';
 import { Tabs, useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
@@ -15,6 +16,7 @@ const iconMap: Record<'index' | 'capture' | 'search' | 'settings', IconName> = {
 export default function TabsLayout() {
   const colors = useThemeColors();
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -37,10 +39,10 @@ export default function TabsLayout() {
         ),
       })}
     >
-      <Tabs.Screen name="index" options={{ title: 'Home' }} />
+      <Tabs.Screen name="index" options={{ title: t('navigation.tabs.home') }} />
       <Tabs.Screen
         name="capture"
-        options={{ title: 'Scan' }}
+        options={{ title: t('navigation.tabs.scan') }}
         listeners={{
           tabPress: (event) => {
             event.preventDefault();
@@ -48,8 +50,8 @@ export default function TabsLayout() {
           },
         }}
       />
-      <Tabs.Screen name="search" options={{ title: 'Search' }} />
-      <Tabs.Screen name="settings" options={{ title: 'Settings' }} />
+      <Tabs.Screen name="search" options={{ title: t('navigation.tabs.search') }} />
+      <Tabs.Screen name="settings" options={{ title: t('navigation.tabs.settings') }} />
     </Tabs>
   );
 }

@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useThemeColors } from '@/hooks/useThemeColors';
@@ -8,12 +9,12 @@ import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
 import { FieldCard } from '@/components/FieldCard';
 import { TagChip } from '@/components/TagChip';
-import { ScanItem } from '@/data/mockData';
 
 dayjs.extend(relativeTime);
 
 export function ContentDetailScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const router = useRouter();
   const { content, scans } = useMockDataStore();
   const params = useLocalSearchParams<{ id?: string; scanId?: string }>();
@@ -29,7 +30,7 @@ export function ContentDetailScreen() {
     return (
       <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-          <Text style={{ color: colors.text }}>No content available.</Text>
+          <Text style={{ color: colors.text }}>{t('contentDetail.noContent')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -46,7 +47,7 @@ export function ContentDetailScreen() {
           {contentItem?.title ?? scanItem?.title}
         </Text>
         <Text style={{ color: colors.textMuted }}>
-          {contentItem?.category ?? scanItem?.type ?? 'Uncategorized'}
+          {contentItem?.category ?? scanItem?.type ?? t('common.uncategorized')}
         </Text>
         <View style={styles.tagRow}>
           {(contentItem?.tags ?? scanItem?.tags ?? []).map((tag) => (
@@ -56,13 +57,13 @@ export function ContentDetailScreen() {
         {contentItem ? (
           <View>
             <View style={styles.headerRow}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Extracted Data</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('contentDetail.extractedHeading')}</Text>
               <TouchableOpacity
                 onPress={() => router.push({ pathname: '/content-edit', params: { id: contentItem.id } })}
                 accessibilityRole="button"
-                accessibilityLabel="Edit extracted data"
+                accessibilityLabel={t('common.accessibility.editExtractedData')}
               >
-                <Text style={{ color: colors.primary }}>Edit</Text>
+                <Text style={{ color: colors.primary }}>{t('contentDetail.edit')}</Text>
               </TouchableOpacity>
             </View>
             {contentItem.fields.map((field) => (
@@ -72,26 +73,26 @@ export function ContentDetailScreen() {
         ) : null}
 
         {scanItem ? (
-          <View style={{ marginTop: spacing.lg }}>
-            <View style={styles.headerRow}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Scan status</Text>
+            <View style={{ marginTop: spacing.lg }}>
+              <View style={styles.headerRow}>
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('contentDetail.scanStatus')}</Text>
+              </View>
+              <View style={[styles.scanMetaCard, { backgroundColor: colors.surface }]}>
+                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.type')}</Text>
+                <Text style={[styles.metaValue, { color: colors.text }]}>{scanItem.type}</Text>
+                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.status')}</Text>
+                <Text style={[styles.metaValue, { color: colors.text }]}>{t(`common.status.${scanItem.status}`)}</Text>
+                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.captured')}</Text>
+                <Text style={[styles.metaValue, { color: colors.text }]}>
+                  {dayjs(scanItem.timestamp).format('MMM D, YYYY h:mm A')} ({dayjs(scanItem.timestamp).fromNow()})
+                </Text>
+              </View>
             </View>
-            <View style={[styles.scanMetaCard, { backgroundColor: colors.surface }]}>
-              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>Type</Text>
-              <Text style={[styles.metaValue, { color: colors.text }]}>{scanItem.type}</Text>
-              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>Status</Text>
-              <Text style={[styles.metaValue, { color: colors.text }]}>{scanItem.status}</Text>
-              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>Captured</Text>
-              <Text style={[styles.metaValue, { color: colors.text }]}>
-                {dayjs(scanItem.timestamp).format('MMM D, YYYY h:mm A')} ({dayjs(scanItem.timestamp).fromNow()})
-              </Text>
-            </View>
-          </View>
-        ) : null}
+          ) : null}
 
         {!contentItem && scanItem ? (
           <Text style={{ color: colors.textMuted, marginTop: spacing.md }}>
-            This scan has not been fully extracted yet. Review and save it once extraction completes.
+            {t('contentDetail.pendingNote')}
           </Text>
         ) : null}
       </ScrollView>

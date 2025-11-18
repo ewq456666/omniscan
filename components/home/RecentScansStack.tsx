@@ -1,5 +1,6 @@
 import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { ScanItem } from '@/data/mockData';
@@ -15,16 +16,17 @@ const STACK_OFFSET = 18;
 
 export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const topScans = scans.slice(0, 3);
   const stackHeight = CARD_HEIGHT + STACK_OFFSET * Math.max(topScans.length - 1, 0);
 
   if (topScans.length === 0) {
     return (
       <View style={[styles.emptyState, { backgroundColor: colors.surface }]}>
-        <Text style={{ color: colors.text, fontWeight: '600' }}>No scans yet</Text>
-        <Text style={{ color: colors.textMuted, marginTop: spacing.xs }}>Capture your first document to see it here.</Text>
+        <Text style={{ color: colors.text, fontWeight: '600' }}>{t('common.noScans')}</Text>
+        <Text style={{ color: colors.textMuted, marginTop: spacing.xs }}>{t('common.captureFirst')}</Text>
         <TouchableOpacity onPress={onPressLibrary} style={styles.emptyCta}>
-          <Text style={{ color: colors.primary, fontWeight: '600' }}>Open Library</Text>
+          <Text style={{ color: colors.primary, fontWeight: '600' }}>{t('common.openLibrary')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -33,9 +35,9 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
   return (
     <View>
       <View style={{ marginBottom: spacing.sm, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={[styles.heading, { color: colors.text }]}>Recent scans</Text>
+        <Text style={[styles.heading, { color: colors.text }]}>{t('common.recentScans')}</Text>
         <TouchableOpacity onPress={onPressLibrary}>
-          <Text style={{ color: colors.primary, fontWeight: '600' }}>View library</Text>
+          <Text style={{ color: colors.primary, fontWeight: '600' }}>{t('common.viewLibrary')}</Text>
         </TouchableOpacity>
       </View>
       <View style={[styles.stackContainer, { height: stackHeight }]} accessibilityRole="list">
@@ -53,7 +55,7 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
             ]}
             onPress={() => onPressScan(scan)}
             accessibilityRole="button"
-            accessibilityLabel={`Open ${scan.title}`}
+            accessibilityLabel={t('common.accessibility.openItem', { title: scan.title })}
           >
             <ImageBackground
               source={{ uri: scan.thumbnail }}

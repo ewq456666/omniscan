@@ -1,22 +1,55 @@
 import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { SectionHeader } from '@/components/SectionHeader';
 import { TagChip } from '@/components/TagChip';
-import { ThemePreference, useMockDataStore } from '@/stores/useMockDataStore';
+import { LocalePreference, ThemePreference, useMockDataStore } from '@/stores/useMockDataStore';
 
 export function SettingsScreen() {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const preferences = useMockDataStore((state) => state.preferences);
   const setThemePreference = useMockDataStore((state) => state.setThemePreference);
+  const setLocalePreference = useMockDataStore((state) => state.setLocalePreference);
   const toggleAutoSync = useMockDataStore((state) => state.toggleAutoSync);
   const toggleNotifications = useMockDataStore((state) => state.toggleNotifications);
 
   const themeOptions: Array<{ label: string; value: ThemePreference; description: string }> = [
-    { label: 'System', value: 'system', description: 'Follow device appearance' },
-    { label: 'Light', value: 'light', description: 'Bright surfaces, dark text' },
-    { label: 'Dark', value: 'dark', description: 'Dim surfaces, high contrast' },
+    {
+      label: t('settings.theme.options.system.label'),
+      value: 'system',
+      description: t('settings.theme.options.system.description'),
+    },
+    {
+      label: t('settings.theme.options.light.label'),
+      value: 'light',
+      description: t('settings.theme.options.light.description'),
+    },
+    {
+      label: t('settings.theme.options.dark.label'),
+      value: 'dark',
+      description: t('settings.theme.options.dark.description'),
+    },
+  ];
+
+  const languageOptions: Array<{ label: string; value: LocalePreference; description: string }> = [
+    {
+      label: t('settings.languagePreference.options.system.label'),
+      value: 'system',
+      description: t('settings.languagePreference.options.system.description'),
+    },
+    {
+      label: t('settings.languagePreference.options.en.label'),
+      value: 'en',
+      description: t('settings.languagePreference.options.en.description'),
+    },
+    {
+      label: t('settings.languagePreference.options.zh-TW.label'),
+      value: 'zh-TW',
+      description: t('settings.languagePreference.options.zh-TW.description'),
+    },
   ];
 
   return (
@@ -26,14 +59,14 @@ export function SettingsScreen() {
         contentContainerStyle={{ paddingBottom: spacing.xxl }}
         contentInsetAdjustmentBehavior="always"
       >
-        <Text style={[styles.title, { color: colors.text }]}>Settings</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('settings.title')}</Text>
 
-        <SectionHeader title="Appearance" />
+        <SectionHeader title={t('settings.sections.appearance')} />
         <View style={[styles.row, { backgroundColor: colors.surface }]}>
           <View>
-            <Text style={[styles.rowTitle, { color: colors.text }]}>Theme</Text>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>{t('settings.theme.label')}</Text>
             <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
-              Choose how OmniScan renders surfaces
+              {t('settings.theme.description')}
             </Text>
           </View>
         </View>
@@ -43,7 +76,7 @@ export function SettingsScreen() {
               key={option.value}
               onPress={() => setThemePreference(option.value)}
               accessibilityRole="button"
-              accessibilityLabel={`${option.label} theme`}
+              accessibilityLabel={t('common.accessibility.themeOption', { label: option.label })}
               accessibilityState={{ selected: preferences.theme === option.value }}
               style={styles.themeChipWrapper}
             >
@@ -55,33 +88,64 @@ export function SettingsScreen() {
           ))}
         </View>
 
-        <SectionHeader title="Sync" />
+        <SectionHeader title={t('settings.sections.language')} />
         <View style={[styles.row, { backgroundColor: colors.surface }]}>
           <View>
-            <Text style={[styles.rowTitle, { color: colors.text }]}>Auto Sync</Text>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>
+              {t('settings.languagePreference.label')}
+            </Text>
             <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
-              Sync new scans when connected to Wi-Fi
+              {t('settings.languagePreference.description')}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.themeOptions}>
+          {languageOptions.map((option) => (
+            <TouchableOpacity
+              key={option.value}
+              onPress={() => setLocalePreference(option.value)}
+              accessibilityRole="button"
+              accessibilityLabel={t('common.accessibility.languageOption', { label: option.label })}
+              accessibilityState={{ selected: preferences.locale === option.value }}
+              style={styles.themeChipWrapper}
+            >
+              <TagChip label={option.label} selected={preferences.locale === option.value} />
+              <Text style={[styles.themeDescription, { color: colors.textMuted }]}>
+                {option.description}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <SectionHeader title={t('settings.sections.sync')} />
+        <View style={[styles.row, { backgroundColor: colors.surface }]}>
+          <View>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>{t('settings.autoSync.label')}</Text>
+            <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
+              {t('settings.autoSync.description')}
             </Text>
           </View>
           <Switch
             value={preferences.autoSync}
             onValueChange={toggleAutoSync}
-            accessibilityLabel="Toggle automatic sync"
+            accessibilityLabel={t('common.accessibility.toggleSync')}
           />
         </View>
 
-        <SectionHeader title="Notifications" />
+        <SectionHeader title={t('settings.sections.notifications')} />
         <View style={[styles.row, { backgroundColor: colors.surface }]}>
           <View>
-            <Text style={[styles.rowTitle, { color: colors.text }]}>Smart reminders</Text>
+            <Text style={[styles.rowTitle, { color: colors.text }]}>
+              {t('settings.notifications.label')}
+            </Text>
             <Text style={[styles.rowSubtitle, { color: colors.textMuted }]}>
-              Get notified about pending reviews
+              {t('settings.notifications.description')}
             </Text>
           </View>
           <Switch
             value={preferences.notifications}
             onValueChange={toggleNotifications}
-            accessibilityLabel="Toggle smart reminders"
+            accessibilityLabel={t('common.accessibility.toggleNotifications')}
           />
         </View>
       </ScrollView>

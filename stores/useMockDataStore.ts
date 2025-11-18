@@ -18,11 +18,13 @@ type AppStatus = {
 };
 
 export type ThemePreference = 'system' | 'light' | 'dark';
+export type LocalePreference = 'system' | 'en' | 'zh-TW';
 
 export type Preferences = {
   theme: ThemePreference;
   autoSync: boolean;
   notifications: boolean;
+  locale: LocalePreference;
 };
 
 export type HomeModuleKey = 'hero' | 'quickActions' | 'processing' | 'recentScans' | 'adaptive';
@@ -49,6 +51,7 @@ type MockDataActions = {
   setThemePreference: (theme: ThemePreference) => void;
   toggleAutoSync: () => void;
   toggleNotifications: () => void;
+  setLocalePreference: (locale: LocalePreference) => void;
   setHomeModulesOrder: (order: HomeModuleKey[]) => void;
   setAdaptivePanelType: (panel: AdaptivePanelType) => void;
 };
@@ -68,6 +71,7 @@ export const useMockDataStore = create<MockDataState & MockDataActions>((set) =>
     theme: 'system',
     autoSync: true,
     notifications: false,
+    locale: 'system',
   },
   homeLayout: {
     order: ['hero', 'quickActions', 'processing', 'recentScans', 'adaptive'],
@@ -92,6 +96,13 @@ export const useMockDataStore = create<MockDataState & MockDataActions>((set) =>
       preferences: {
         ...state.preferences,
         notifications: !state.preferences.notifications,
+      },
+    })),
+  setLocalePreference: (locale) =>
+    set((state) => ({
+      preferences: {
+        ...state.preferences,
+        locale,
       },
     })),
   setHomeModulesOrder: (order) =>
