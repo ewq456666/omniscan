@@ -15,6 +15,7 @@ import { spacing } from '@/theme/spacing';
 import { ContentCard } from '@/components/ContentCard';
 import { TagChip } from '@/components/TagChip';
 import { useMockDataStore } from '@/stores/useMockDataStore';
+import { categoryDefinitions, CategoryId } from '@/data/categoryDefinitions';
 
 export function SearchScreen() {
   const colors = useThemeColors();
@@ -25,7 +26,7 @@ export function SearchScreen() {
   const categories = useMockDataStore((state) => state.categories);
   const initialTag = typeof params.tag === 'string' ? params.tag : '';
   const [query, setQuery] = useState(initialTag);
-  const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [activeCategory, setActiveCategory] = useState<'All' | CategoryId>('All');
   const [activeTag, setActiveTag] = useState<string | null>(initialTag || null);
 
   useEffect(() => {
@@ -41,23 +42,26 @@ export function SearchScreen() {
       normalizedQuery.length === 0 ||
       item.title.toLowerCase().includes(normalizedQuery) ||
       item.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery));
-    const matchesCategory =
-      activeCategory === 'All' || item.category === activeCategory;
+  const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
     const matchesTag = !activeTag || item.tags.includes(activeTag);
     return matchesQuery && matchesCategory && matchesTag;
   });
 
-  const categoryKeyMap: Record<string, string> = {
-    All: 'all',
-    Receipts: 'receipts',
-    'Business Cards': 'businessCard',
-    Notes: 'notes',
-    Documents: 'documents',
+  const categoryFilters: Array<'All' | CategoryId> = ['All', ...categories];
+  const getCategoryLabel = (value: 'All' | CategoryId) => {
+    if (value === 'All') {
+      return t('search.categories.all');
+    }
+    const definition = categoryDefinitions[value];
+    return t(definition.label);
   };
 
-  const getCategoryLabel = (value: string) => {
-    const key = categoryKeyMap[value];
-    return key ? t(`search.categories.${key}`) : value;
+  const handleCategoryPress = (value: 'All' | CategoryId) => {
+    if (value === 'All') {
+      setActiveCategory('All');
+      return;
+    }
+    setActiveCategory((current) => (current === value ? 'All' : value));
   };
 
   return (
@@ -81,16 +85,14 @@ export function SearchScreen() {
         />
         <FlatList
           horizontal
-          data={categories}
+          data={categoryFilters}
           keyExtractor={(item) => item}
           contentContainerStyle={{ paddingVertical: spacing.sm }}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={{ marginRight: spacing.sm }}
-              onPress={() =>
-                setActiveCategory((current) => (current === item ? 'All' : item))
-              }
+              onPress={() => handleCategoryPress(item)}
               accessibilityRole="button"
               accessibilityLabel={t('common.accessibility.filterBy', { value: getCategoryLabel(item) })}
               accessibilityState={{ selected: item === activeCategory }}

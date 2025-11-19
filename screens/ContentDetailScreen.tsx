@@ -7,8 +7,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { spacing } from '@/theme/spacing';
 import { useMockDataStore } from '@/stores/useMockDataStore';
-import { FieldCard } from '@/components/FieldCard';
 import { TagChip } from '@/components/TagChip';
+import { CategoryTemplate } from '@/components/CategoryTemplate';
+import { categoryDefinitions, CategoryId } from '@/data/categoryDefinitions';
 
 dayjs.extend(relativeTime);
 
@@ -25,6 +26,15 @@ export function ContentDetailScreen() {
     ? content.find((entry) => entry.id === resolvedContentId)
     : undefined;
   const scanItem = scanId ? scans.find((scan) => scan.id === scanId) : undefined;
+  const getCategoryLabel = () => {
+    if (contentItem) {
+      return t(categoryDefinitions[contentItem.category].label);
+    }
+    if (scanItem && isCategoryId(scanItem.type)) {
+      return t(categoryDefinitions[scanItem.type].label);
+    }
+    return scanItem?.type ?? t('common.uncategorized');
+  };
 
   if (!contentItem && !scanItem) {
     return (
@@ -46,9 +56,7 @@ export function ContentDetailScreen() {
         <Text style={[styles.title, { color: colors.text }]}>
           {contentItem?.title ?? scanItem?.title}
         </Text>
-        <Text style={{ color: colors.textMuted }}>
-          {contentItem?.category ?? scanItem?.type ?? t('common.uncategorized')}
-        </Text>
+        <Text style={{ color: colors.textMuted }}>{getCategoryLabel()}</Text>
         <View style={styles.tagRow}>
           {(contentItem?.tags ?? scanItem?.tags ?? []).map((tag) => (
             <TagChip key={tag} label={tag} style={styles.tagChip} />
@@ -66,9 +74,7 @@ export function ContentDetailScreen() {
                 <Text style={{ color: colors.primary }}>{t('contentDetail.edit')}</Text>
               </TouchableOpacity>
             </View>
-            {contentItem.fields.map((field) => (
-              <FieldCard key={field.id} field={field} />
-            ))}
+            <CategoryTemplate category={contentItem.category} fields={contentItem.fields} />
           </View>
         ) : null}
 
@@ -79,7 +85,7 @@ export function ContentDetailScreen() {
               </View>
               <View style={[styles.scanMetaCard, { backgroundColor: colors.surface }]}>
                 <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.type')}</Text>
-                <Text style={[styles.metaValue, { color: colors.text }]}>{scanItem.type}</Text>
+                <Text style={[styles.metaValue, { color: colors.text }]}>{getCategoryLabel()}</Text>
                 <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.status')}</Text>
                 <Text style={[styles.metaValue, { color: colors.text }]}>{t(`common.status.${scanItem.status}`)}</Text>
                 <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.captured')}</Text>
@@ -147,3 +153,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+function isCategoryId(value: string): value is CategoryId {
+  return value in categoryDefinitions;
+}

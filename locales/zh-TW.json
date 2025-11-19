@@ -158,7 +158,7 @@
         },
         "zh-TW": {
           "label": "繁體中文 (ZH-TW)",
-          "description": "顯示繁體中文介面"
+          "description": "顯示為繁體中文"
         }
       }
     },
@@ -204,7 +204,11 @@
     "type": "類型",
     "status": "狀態",
     "captured": "拍攝時間",
-    "pendingNote": "此掃描尚未完成擷取，完成後請再次確認並儲存。"
+    "pendingNote": "此掃描尚未完成擷取，完成後請再次確認並儲存。",
+    "additionalDetails": "更多詳情",
+    "missingField": "尚未填寫",
+    "missingTitle": "需補齊資訊",
+    "missingDescription": "請補齊標示欄位以完成此筆資料。"
   },
   "contentList": {
     "title": "資料庫"
@@ -241,6 +245,38 @@
       "businessCard": "名片",
       "receipt": "收據",
       "note": "筆記"
+    }
+  },
+  "categories": {
+    "receipt": "發票",
+    "businessCard": "名片"
+  },
+  "fields": {
+    "merchant": "商家",
+    "fullName": "姓名",
+    "items": "品項",
+    "title": "職稱",
+    "paymentMethod": "付款方式",
+    "notes": "備註",
+    "date": "日期",
+    "company": "公司",
+    "email": "電子郵件",
+    "tax": "稅額",
+    "address": "地址",
+    "website": "網站",
+    "total": "總額",
+    "phone": "電話"
+  },
+  "receipt": {
+    "section": {
+      "payment": "付款資訊",
+      "summary": "摘要"
+    }
+  },
+  "businessCard": {
+    "section": {
+      "identity": "基本資料",
+      "contact": "聯絡方式"
     }
   }
 }

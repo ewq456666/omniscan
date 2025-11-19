@@ -63,6 +63,26 @@
       "settings": "Settings"
     }
   },
+  "categories": {
+    "receipt": "Receipt",
+    "businessCard": "Business Card"
+  },
+  "fields": {
+    "merchant": "Merchant",
+    "total": "Total",
+    "date": "Date",
+    "paymentMethod": "Payment method",
+    "tax": "Tax",
+    "notes": "Notes",
+    "items": "Line items",
+    "fullName": "Name",
+    "company": "Company",
+    "title": "Title",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "address": "Address"
+  },
   "home": {
     "welcomeTitle": "Welcome back",
     "welcomeSubtitle": "Keep your documents organized and searchable",
@@ -204,7 +224,11 @@
     "type": "Type",
     "status": "Status",
     "captured": "Captured",
-    "pendingNote": "This scan has not been fully extracted yet. Review and save it once extraction completes."
+    "pendingNote": "This scan has not been fully extracted yet. Review and save it once extraction completes.",
+    "additionalDetails": "Additional details",
+    "missingField": "No value yet",
+    "missingTitle": "Missing required info",
+    "missingDescription": "Complete the highlighted fields to finish this record."
   },
   "contentList": {
     "title": "Library"
@@ -229,6 +253,18 @@
     "suggestedTags": "Suggested Tags",
     "share": "Share",
     "save": "Save"
+  },
+  "receipt": {
+    "section": {
+      "summary": "Summary",
+      "payment": "Payment details"
+    }
+  },
+  "businessCard": {
+    "section": {
+      "identity": "Identity",
+      "contact": "Contact details"
+    }
   },
   "processing": {
     "title": "Processing",

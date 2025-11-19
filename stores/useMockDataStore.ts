@@ -11,6 +11,7 @@ import {
   mockScans,
   mockTags,
 } from '@/data/mockData';
+import type { CategoryId } from '@/data/categoryDefinitions';
 
 type AppStatus = {
   syncStatus: 'idle' | 'syncing' | 'error';
@@ -41,7 +42,7 @@ type MockDataState = {
   extractedFields: ExtractedField[];
   processingSteps: ProcessingStep[];
   tags: string[];
-  categories: string[];
+  categories: CategoryId[];
   appStatus: AppStatus;
   preferences: Preferences;
   homeLayout: HomeLayout;

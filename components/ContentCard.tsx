@@ -4,6 +4,7 @@ import { ContentItem } from '@/data/mockData';
 import { spacing } from '@/theme/spacing';
 import { useThemeColors } from '@/hooks/useThemeColors';
 import { TagChip } from '@/components/TagChip';
+import { categoryDefinitions } from '@/data/categoryDefinitions';
 
 interface Props {
   item: ContentItem;
@@ -14,6 +15,7 @@ export function ContentCard({ item, onPress }: Props) {
   const colors = useThemeColors();
   const { t } = useTranslation();
   const formattedDate = new Date(item.updatedAt).toLocaleDateString();
+  const categoryLabel = t(categoryDefinitions[item.category].label);
 
   return (
     <TouchableOpacity
@@ -29,9 +31,7 @@ export function ContentCard({ item, onPress }: Props) {
         <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
           {item.title}
         </Text>
-        <Text style={[styles.category, { color: colors.textMuted }]}>
-          {item.category}
-        </Text>
+        <Text style={[styles.category, { color: colors.textMuted }]}>{categoryLabel}</Text>
         <View style={styles.tagsRow}>
           {item.tags.map((tag) => (
             <TagChip key={tag} label={tag} style={styles.tagChip} />
