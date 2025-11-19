@@ -46,6 +46,7 @@ type MockDataState = {
   appStatus: AppStatus;
   preferences: Preferences;
   homeLayout: HomeLayout;
+  pinnedAnalytics: CategoryId[];
 };
 
 type MockDataActions = {
@@ -55,6 +56,7 @@ type MockDataActions = {
   setLocalePreference: (locale: LocalePreference) => void;
   setHomeModulesOrder: (order: HomeModuleKey[]) => void;
   setAdaptivePanelType: (panel: AdaptivePanelType) => void;
+  toggleAnalyticsPin: (categoryId: CategoryId) => void;
 };
 
 export const useMockDataStore = create<MockDataState & MockDataActions>((set) => ({
@@ -120,4 +122,14 @@ export const useMockDataStore = create<MockDataState & MockDataActions>((set) =>
         adaptivePanel: panel,
       },
     })),
+  pinnedAnalytics: [],
+  toggleAnalyticsPin: (categoryId) =>
+    set((state) => {
+      const isPinned = state.pinnedAnalytics.includes(categoryId);
+      return {
+        pinnedAnalytics: isPinned
+          ? state.pinnedAnalytics.filter((id) => id !== categoryId)
+          : [...state.pinnedAnalytics, categoryId],
+      };
+    }),
 }));

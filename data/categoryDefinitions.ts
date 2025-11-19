@@ -30,6 +30,9 @@ export type CategoryDefinition = {
   requiredFields: FieldSpec[];
   optionalFields?: FieldSpec[];
   presentation: TemplateConfig;
+  analytics?: {
+    enabled: boolean;
+  };
 };
 
 export const categoryDefinitions: Record<CategoryId, CategoryDefinition> = {
@@ -67,6 +70,9 @@ export const categoryDefinitions: Record<CategoryId, CategoryDefinition> = {
         { titleKey: 'receipt.section.summary', fieldIds: ['merchant_name', 'transaction_date', 'total_amount'] },
         { titleKey: 'receipt.section.payment', fieldIds: ['payment_method', 'tax_amount', 'notes'] },
       ],
+    },
+    analytics: {
+      enabled: true,
     },
   },
   business_card: {

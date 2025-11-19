@@ -58,7 +58,7 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
             accessibilityLabel={t('common.accessibility.openItem', { title: scan.title })}
           >
             <ImageBackground
-              source={{ uri: scan.thumbnail }}
+              source={{ uri: scan.thumbnailUri }}
               style={styles.thumbnail}
               imageStyle={{ borderRadius: 16 }}
             >
@@ -74,7 +74,7 @@ export function RecentScansStack({ scans, onPressLibrary, onPressScan }: Props) 
               <View style={styles.metaRow}>
                 <MaterialCommunityIcons name="tag" color={colors.textMuted} size={14} />
                 <Text style={{ color: colors.textMuted, marginLeft: spacing.xs, fontSize: 12 }}>
-                  {scan.tags.join(', ')}
+                  {(scan.tags || []).join(', ')}
                 </Text>
               </View>
             </View>

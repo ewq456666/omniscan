@@ -278,5 +278,30 @@
       "receipt": "Receipt",
       "note": "Note"
     }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "empty": "No analytics available",
+    "emptySuggestion": "Start scanning to see insights",
+    "receiptTitle": "Receipt Analytics",
+    "receiptSubtitle": "{{count}} receipts",
+    "viewInsights": "View spending insights",
+    "breakdown": "Spending Breakdown"
+  },
+  "receiptAnalytics": {
+    "title": "Receipt Analytics",
+    "monthlyOverview": "Monthly Overview",
+    "currentMonth": "This Month",
+    "timePeriod": {
+      "7days": "7 Days",
+      "30days": "30 Days",
+      "90days": "90 Days"
+    },
+    "breakdown": "Spending Breakdown",
+    "topRankings": "Top Rankings",
+    "insights": "Insights",
+    "highestTransaction": "Highest Transaction",
+    "frequentMerchants": "Frequent Merchants",
+    "paymentMethods": "Payment Methods"
   }
 }

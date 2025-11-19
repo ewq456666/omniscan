@@ -35,8 +35,8 @@ export function HomeScreen() {
     processingSteps.length === 0
       ? 0
       : Math.round(
-          (processingSteps.reduce((sum, step) => sum + step.progress, 0) / processingSteps.length) * 100,
-        );
+        (processingSteps.reduce((sum, step) => sum + step.progress, 0) / processingSteps.length) * 100,
+      );
 
   const quickActions: QuickAction[] = useMemo(
     () => [
@@ -87,6 +87,27 @@ export function HomeScreen() {
     [appStatus.pendingUploads, colors.primary, colors.text, pendingScansCount, router, t],
   );
 
+  const pinnedAnalytics = useMockDataStore((state) => state.pinnedAnalytics);
+
+  const pinnedActions: QuickAction[] = useMemo(() => {
+    return pinnedAnalytics.map(categoryId => {
+      // Currently only receipt is supported, but this is extensible
+      if (categoryId === 'receipt') {
+        return {
+          key: 'analytics-receipt',
+          title: t('analytics.receiptTitle', { defaultValue: 'Receipt Analytics' }),
+          subtitle: t('analytics.viewInsights', { defaultValue: 'View spending insights' }),
+          icon: <MaterialCommunityIcons name="chart-bar" size={22} color={colors.primary} /> as any,
+          onPress: () => router.push('/receipt-analytics'),
+          accentColor: colors.primary,
+        };
+      }
+      return null;
+    }).filter((action) => action !== null) as QuickAction[];
+  }, [pinnedAnalytics, colors.primary, router, t]);
+
+  const allQuickActions = [...pinnedActions, ...quickActions];
+
   const renderModule = ({ item }: ListRenderItemInfo<ModuleItem>) => {
     switch (item.key) {
       case 'hero':
@@ -107,7 +128,7 @@ export function HomeScreen() {
       case 'quickActions':
         return (
           <View style={styles.module}>
-            <QuickActionGrid actions={quickActions} />
+            <QuickActionGrid actions={allQuickActions} />
           </View>
         );
       case 'processing':

@@ -30,10 +30,10 @@ export function ContentDetailScreen() {
     if (contentItem) {
       return t(categoryDefinitions[contentItem.category].label);
     }
-    if (scanItem && isCategoryId(scanItem.type)) {
-      return t(categoryDefinitions[scanItem.type].label);
+    if (scanItem && scanItem.category && isCategoryId(scanItem.category)) {
+      return t(categoryDefinitions[scanItem.category].label);
     }
-    return scanItem?.type ?? t('common.uncategorized');
+    return scanItem?.category ?? t('common.uncategorized');
   };
 
   if (!contentItem && !scanItem) {
@@ -79,22 +79,22 @@ export function ContentDetailScreen() {
         ) : null}
 
         {scanItem ? (
-            <View style={{ marginTop: spacing.lg }}>
-              <View style={styles.headerRow}>
-                <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('contentDetail.scanStatus')}</Text>
-              </View>
-              <View style={[styles.scanMetaCard, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.type')}</Text>
-                <Text style={[styles.metaValue, { color: colors.text }]}>{getCategoryLabel()}</Text>
-                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.status')}</Text>
-                <Text style={[styles.metaValue, { color: colors.text }]}>{t(`common.status.${scanItem.status}`)}</Text>
-                <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.captured')}</Text>
-                <Text style={[styles.metaValue, { color: colors.text }]}>
-                  {dayjs(scanItem.timestamp).format('MMM D, YYYY h:mm A')} ({dayjs(scanItem.timestamp).fromNow()})
-                </Text>
-              </View>
+          <View style={{ marginTop: spacing.lg }}>
+            <View style={styles.headerRow}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('contentDetail.scanStatus')}</Text>
             </View>
-          ) : null}
+            <View style={[styles.scanMetaCard, { backgroundColor: colors.surface }]}>
+              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.type')}</Text>
+              <Text style={[styles.metaValue, { color: colors.text }]}>{getCategoryLabel()}</Text>
+              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.status')}</Text>
+              <Text style={[styles.metaValue, { color: colors.text }]}>{t(`common.status.${scanItem.status}`)}</Text>
+              <Text style={[styles.metaLabel, { color: colors.textMuted }]}>{t('contentDetail.captured')}</Text>
+              <Text style={[styles.metaValue, { color: colors.text }]}>
+                {dayjs(scanItem.dateScanned).format('MMM D, YYYY h:mm A')} ({dayjs(scanItem.dateScanned).fromNow()})
+              </Text>
+            </View>
+          </View>
+        ) : null}
 
         {!contentItem && scanItem ? (
           <Text style={{ color: colors.textMuted, marginTop: spacing.md }}>

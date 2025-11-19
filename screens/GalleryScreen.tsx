@@ -28,7 +28,7 @@ export function GalleryScreen() {
               ]}
             >
               <ImageBackground
-                source={{ uri: item.thumbnail }}
+                source={{ uri: item.thumbnailUri }}
                 style={styles.card}
                 imageStyle={{ borderRadius: 18 }}
               >
@@ -43,7 +43,7 @@ export function GalleryScreen() {
                   ]}
                 >
                   <Text style={[styles.cardTitle, { color: '#FFFFFF' }]} numberOfLines={2}>
-                    {item.title}
+                    {item.title ?? t('common.untitled')}
                   </Text>
                   <Text style={[styles.cardSubtitle, { color: '#E5E7EB' }]} numberOfLines={1}>
                     {item.subtitle}

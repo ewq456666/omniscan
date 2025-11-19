@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   FlatList,
   StyleSheet,
@@ -42,7 +43,7 @@ export function SearchScreen() {
       normalizedQuery.length === 0 ||
       item.title.toLowerCase().includes(normalizedQuery) ||
       item.tags.some((tag) => tag.toLowerCase().includes(normalizedQuery));
-  const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
+    const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
     const matchesTag = !activeTag || item.tags.includes(activeTag);
     return matchesQuery && matchesCategory && matchesTag;
   });
@@ -67,7 +68,17 @@ export function SearchScreen() {
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <Text style={[styles.title, { color: colors.text }]}>{t('search.title')}</Text>
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text, marginBottom: 0 }]}>{t('search.title')}</Text>
+          <TouchableOpacity
+            onPress={() => router.push('/analytics-hub')}
+            style={[styles.analyticsButton, { backgroundColor: colors.surfaceAlt }]}
+            accessibilityRole="button"
+            accessibilityLabel={t('analytics.title', { defaultValue: 'Analytics' })}
+          >
+            <MaterialCommunityIcons name="chart-bar" size={24} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
         <TextInput
           value={query}
           onChangeText={setQuery}
@@ -149,10 +160,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.lg,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+  },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: spacing.lg,
+  },
+  analyticsButton: {
+    padding: spacing.sm,
+    borderRadius: 12,
   },
   input: {
     borderRadius: 16,

@@ -26,7 +26,7 @@ export function ContentCard({ item, onPress }: Props) {
       accessibilityLabel={t('common.accessibility.openItem', { title: item.title })}
       accessibilityHint={t('common.accessibility.openContentDetails')}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+      <Image source={{ uri: item.thumbnailUri }} style={styles.thumbnail} />
       <View style={styles.content}>
         <Text style={[styles.title, { color: colors.text }]} numberOfLines={1}>
           {item.title}

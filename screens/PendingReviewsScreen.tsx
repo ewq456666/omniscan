@@ -85,11 +85,11 @@ export function PendingReviewsScreen() {
               accessibilityRole="button"
               accessibilityLabel={t('common.accessibility.openItem', { title: item.title })}
             >
-              <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+              <Image source={{ uri: item.thumbnailUri }} style={styles.thumbnail} />
               <View style={styles.cardBody}>
                 <View style={styles.cardHeader}>
                   <Text style={[styles.cardTitle, { color: colors.text }]} numberOfLines={1}>
-                    {item.title}
+                    {item.title ?? t('common.untitled')}
                   </Text>
                   <StatusPill status={item.status} />
                 </View>
@@ -97,7 +97,7 @@ export function PendingReviewsScreen() {
                   {item.subtitle}
                 </Text>
                 <Text style={[styles.timestamp, { color: colors.textMuted }]}>
-                  {dayjs(item.timestamp).fromNow()}
+                  {dayjs(item.dateScanned).fromNow()}
                 </Text>
               </View>
             </TouchableOpacity>
