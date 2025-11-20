@@ -55,11 +55,27 @@
 - Derived data belongs in `useMemo` inside the consuming component (e.g., pending counts, processing summaries). Do not derive objects in selectors unless memoized.
 - When multiple components need the same slice, create lightweight hooks (e.g., `useScans()` that just returns `state.scans`) to keep call sites consistent.
 
+## Category Template Strategy
+- **Architecture**: `screens/ContentDetailScreen.tsx` delegates rendering to `components/CategoryTemplate.tsx`, which dynamically selects a template based on the category definition.
+- **Registry**: `components/templates/registry.ts` maps template names (e.g., "BusinessCardTemplate") to React components.
+- **Templates**:
+  - Located in `components/templates/`.
+  - Must accept `definition` (schema) and `fields` (extracted data).
+  - Examples: `BusinessCardTemplate` (contact-focused), `ReceiptTemplate` (transaction-focused), `GenericTemplate` (fallback).
+- **Extensibility**: To add a new category:
+  1. Define it in `data/categoryDefinitions.ts`.
+  2. Create a template in `components/templates/`.
+  3. Register it in `registry.ts`.
+
 ## Feature Notes
 - **Home**: Modular grid with adaptive panel; “View all” on the pending panel routes to `/pending-reviews`.
 - **Search**: Honors optional `tag` param (from chips/deep links). Shows the active tag chip plus a clear control.
 - **Pending Reviews**: Lists every scan in `processing` or `error`, provides filter chips, relative timestamps, and routes to `/content-detail?scanId=...` on selection.
-- **Content Detail**: Accepts `id` (content record) or `scanId` (raw scan). Shows extracted fields when available otherwise falls back to scan metadata + status.
+- **Content Detail**:
+  - Dynamic rendering via `CategoryTemplate`.
+  - Specific layouts for Business Cards (hero name, contact grid) and Receipts (merchant header, totals).
+  - Fallback to generic field list for other categories.
+  - Edit mode (`/content-edit`) allows modifying extracted fields.
 - **Settings**: Edits theme/locale/auto-sync/notifications in-place using the shared components + SafeArea layout.
 
 ## Contributor Expectations
